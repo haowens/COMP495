@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    background-color: black;
+  }
+  
+  :root {
+    --gray-dark: #5b5b5b;
+    --gray: #969696;
+    --off-white: #f4f4f4;
+    --bg: #fff;
+    --primary: goldenrod;
+    --secondary: teal;
+  }
+  
+  /* Styles for .filler */
+  .filler {
+    height: 20rem;
+    text-align: center;
+  }
+  
+  /* Styles for #scrolly-side .scrolly */
+  #scrolly-side .scrolly {
+    display: flex;
+    max-width: 60rem;
+    margin: 3rem auto;
+    /* background-color: var(--off-white); */
+    padding: 1rem;
+  }
+  
+  #scrolly-side .scrolly > * {
+    flex: 1;
+  }
+  
+  #scrolly-side .scrolly article {
+    padding-right: 1rem;
+    max-width: 30rem;
+  }
+  
+  #scrolly-side .scrolly article .step {
+    min-height: 100vh;
+    margin-bottom: 1rem;
+    background-color: var(--gray-dark);
+    transition: background-color 250ms ease-in-out;
+  }
+  
+  #scrolly-side .scrolly article .step:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  #scrolly-side .scrolly article .step.is-active {
+    background-color: var(--secondary);
+  }
+  
+  #scrolly-side .scrolly article .step p {
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 400;
+    color: var(--off-white);
+  }
+  
+  #scrolly-side .scrolly figure.sticky {
+    position: sticky;
+    width: 100%;
+    height: 70vh;
+    /* background: var(--gray); */
+    margin: 0;
+    top: 25vh;
+    left: 0;
+    z-index: 0 !important;
+  }
+  
+  #scrolly-side .scrolly figure.sticky .mainfig {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    transform: translateY(-10%);
+    width: 90%;
+    height: 60%rem;
+    /* background-color: var(--bg); */
+    z-index: 0 !important;
+  }
+  
+  #scrolly-side .scrolly figure.sticky .bar-inner {
+    width: 10%;
+    height: 100%;
+    transition: width 1s ease-in-out;
+    background-color: var(--primary);
+  }
+  
+  figure.sticky {
+    display: flex;
+    justify-content: flex-end;
+    position: sticky;
+    width: 100%;
+    height: 20vh;
+    background: rgba(187, 40, 40, 0);
+    margin: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  #route {
+    position: sticky;
+    width: 90%;
+    z-index: 10 !important;
+  }
+  
+  #scrolly-overlay .scrolly figure.sticky .bar-outer {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 90%;
+    height: 4rem;
+    background-color: var(--bg);
+  }
+  
+  #scrolly-overlay .scrolly figure.sticky .bar-inner {
+    width: 10%;
+    height: 100%;
+    transition: width 1s ease-in-out;
+    background-color: var(--primary);
+  }
+  
