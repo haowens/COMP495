@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 #scrolly {
     position: relative;
     display: -webkit-box;
@@ -31,6 +35,10 @@ figure {
     z-index: 0;
 }
 
+div {
+    margin: 0px;
+}
+
 figure p {
     text-align: center;
     padding: 1rem;
@@ -43,6 +51,60 @@ figure p {
     font-size: 8rem;
     font-weight: 900;
     color: #fff;
+}
+
+.title-page {
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    gap: none;
+    margin: 0;
+    /* gap: 2rem; */
+}
+
+.title-text {
+    color: white;
+    font-size: xx-large;
+    font-family: "Helvetica";
+}
+
+.subtitle-text {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    font-size: large;
+    font-family: "Helvetica";
+    gap: 0.25rem;
+}
+
+.rect-row {
+    display: flex;
+    flex-direction: row;
+    /* gap: 2rem; */
+    width: 100%;
+    height: 45vh;
+    border: 1px solid green;
+    margin: 0;
+}
+
+.rect-row-cropped {
+    display: flex;
+    flex-direction: row;
+    /* gap: 2rem; */
+    width: 100%;
+    height: 5vh;
+    border: 1px solid green;
+    margin: 0;
+}
+
+.rect {
+    width: 20%;
+    height: 100%;
+    background-color: #3b3b3b;
+    border: 1px solid yellow;
+    border-radius: 10;
 }
 
 .step {
