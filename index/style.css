@@ -165,7 +165,7 @@ figure p {
 }
 
 .step.is-active {
-    background-color: goldenrod;
+    background-color: rgb(121, 182, 208);
     color: #3b3b3b;
 }
 
