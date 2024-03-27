@@ -1,47 +1,47 @@
 Comic,Word,Themes
-Kanan,Friend,Goal
-Kanan,Friend,Letter
-Kanan,Friend,Sadness/Depression
-Kanan,Friend,Good friend
-Kanan,Friend,Favors
-Kanan,Time,Travel
-Kanan,Time,Small talk
-Kanan,Time,"""Time pass"""
-Kanan,Time,Hobbies
-Kanan,Play,Caesar
-Kanan,Play,Video games
-Kanan,Play,Cricket
-Kanan,Play,Stop playing
-Kanan,Play,Band
-Kanan,Play,
-Kanan,Dog,Caesar (dog's name)
-Kanan,Dog,Bored
-Kanan,Dog,Breeding
-Kanan,Goal,Letter
-Kanan,Goal,Life
-Kanan,Goal,Accomplish
-Kanan,Goal,Dog
-Kanan,Goal,Health
-Kanan,Goal,Studies
-Kanan,Goal,Friends
-Kanan,Goal,Achieving
-Kanan,Goal,End
-Kanan,Letter,Friend 
-Kanan,Letter,Letter writing
-Kanan,Letter,School assignment
-Kanan,Letter,Losing
-Kanan,Letter,Video games
-Kanan,Letter,Goal
-Kanan,Letter,Future self
-Kanan,Letter,Metaphor
-Kanan,Metaphor,Caesar 
-Kanan,Metaphor,Band
-Kanan,Metaphor,Simile
-Kanan,Metaphor,Letter
-Kanan,Life,Goals
-Kanan,Life,Side missions
-Kanan,Life,Friend
-Kanan,Life,Difficulties
+Kanan,friend,Goal
+Kanan,friend,Letter
+Kanan,friend,Sadness/Depression
+Kanan,friend,Good friend
+Kanan,friend,Favors
+Kanan,time,Travel
+Kanan,time,Small talk
+Kanan,time,"""Time pass"""
+Kanan,time,Hobbies
+Kanan,play,Caesar
+Kanan,play,Video games
+Kanan,play,Cricket
+Kanan,play,Stop playing
+Kanan,play,Band
+Kanan,play,
+Kanan,dog,Caesar (dog's name)
+Kanan,dog,Bored
+Kanan,dog,Breeding
+Kanan,goal,Letter
+Kanan,goal,Life
+Kanan,goal,Accomplish
+Kanan,goal,Dog
+Kanan,goal,Health
+Kanan,goal,Studies
+Kanan,goal,Friends
+Kanan,goal,Achieving
+Kanan,goal,End
+Kanan,letter,Friend 
+Kanan,letter,Letter writing
+Kanan,letter,School assignment
+Kanan,letter,Losing
+Kanan,letter,Video games
+Kanan,letter,Goal
+Kanan,letter,Future self
+Kanan,letter,Metaphor
+Kanan,metaphor,Caesar 
+Kanan,metaphor,Band
+Kanan,metaphor,Simile
+Kanan,metaphor,Letter
+Kanan,life,Goals
+Kanan,life,Side missions
+Kanan,life,Friend
+Kanan,life,Difficulties
 Vir,Indian,Culture
 Vir,Indian,Childhood
 Vir,Indian,Stereotype (smart)
@@ -52,31 +52,31 @@ Vir,World,Travel
 Vir,World,Stereotype (smart)
 Vir,World,Social media
 Vir,World,Religion
-Vir,Believe,Stereotype (smart)
-Vir,Believe,God
-Vir,Believe,Lie
-Vir,Believe,Rights
+Vir,believe,Stereotype (smart)
+Vir,believe,God
+Vir,believe,Lie
+Vir,believe,Rights
 Vir,Story ,Religion
 Vir,Story ,Mythology/Ramayan
-Vir,Woman,Feminism
-Vir,Woman,Wear
-Vir,Woman,World
-Vir,Woman,Beauty
-Kenny,Mom,Parents 
+Vir,woman,Feminism
+Vir,woman,Wear
+Vir,woman,World
+Vir,woman,Beauty
+Kenny,woman,Parents 
 Kenny,Mom,Growing up
 Kenny,Mom,Hating parents
 Kenny,Mom,Guests
 Kenny,Mom,Maid
-Kenny,Woman,Friend
-Kenny,Woman,Maid
-Kenny,House/home,Mom
-Kenny,House/home,Maid
-Kenny,House/home,Dad
-Kenny,Dance,Growing up
-Kenny,Die,Maid
-Kenny,Friend,Growing up
-Mulaney,Horse,hospital
-Mulaney,Horse,Trump as president
+Kenny,woman,Friend
+Kenny,woman,Maid
+Kenny,house/home,Mom
+Kenny,house/home,Maid
+Kenny,house/home,Dad
+Kenny,dance,Growing up
+Kenny,die,Maid
+Kenny,friend,Growing up
+Mulaney,horse,hospital
+Mulaney,horse,Trump as president
 Mulaney,wife,having kids
 Mulaney,wife,people changing
 Mulaney,wife,"religion,"
@@ -139,12 +139,12 @@ Rock,play,racism
 Rock,world,exceptionality
 Rock,world,kids
 Rock,world,Trump
-Kate Berlant,Camera,parasocial relationships
-Kate Berlant,Camera,gendered double standards
-Kate Berlant,Life,sex
-Kate Berlant,Life,barf
-Kate Berlant,Life,choice
-Kate Berlant,Life,time
+Kate Berlant,camera,parasocial relationships
+Kate Berlant,camera,gendered double standards
+Kate Berlant,life,sex
+Kate Berlant,life,barf
+Kate Berlant,life,choice
+Kate Berlant,life,time
 Kate Berlant,woman,liberating disorganization
 Kate Berlant,woman,cosmetics
 Kate Berlant,woman,president

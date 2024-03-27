@@ -7,10 +7,10 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <svg width="1500" height="700"></svg>
+  <svg width="1200" height="800"></svg>
 
   <script>
-    d3.csv("compiled_comedy.csv").then(function(data) {
+    d3.csv("standup.csv").then(function(data) {
       const nodes = {};
       const links = [];
 
@@ -46,8 +46,11 @@
 
       const simulation = d3.forceSimulation(nodesArray)
         .force("link", d3.forceLink(links).id(d => d.name))
-        .force("charge", d3.forceManyBody().strength(-100))
-        .force("center", d3.forceCenter(width / 2, height / 2));
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("x", d3.forceX().strength(0.1).x(width / 2))
+        .force("y", d3.forceY().strength(0.1).y(height / 2))
+        .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
 
       const link = svg.selectAll("line")
         .data(links)
@@ -113,5 +116,4 @@
     });
   </script>
 </body>
-</html>
-
+</html> 
