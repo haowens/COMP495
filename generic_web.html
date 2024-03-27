@@ -7,7 +7,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <svg width="700" height="500"></svg>
+  <svg width="1200" height="800"></svg>
 
   <script>
     d3.csv("standup.csv").then(function(data) {
@@ -17,14 +17,24 @@
       data.forEach(function(d) {
         const comic = d.Comic;
         const word = d.Word;
+        const themes = d.Themes.split('/'); // Split themes by '/'
+
         // Create nodes for comics
         if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic" };
 
         // Create nodes for words and connect comics to words
         if (!nodes[word]) {
-          nodes[word] = { name: word, type: "word",};
+          nodes[word] = { name: word, type: "word", themes: themes };
         }
         links.push({ source: comic, target: word });
+
+        // Create nodes for themes and connect words to themes
+        themes.forEach(theme => {
+          if (!nodes[theme]) {
+            nodes[theme] = { name: theme, type: "theme" };
+          }
+          links.push({ source: word, target: theme });
+        });
       });
 
       // Convert nodes object to array
