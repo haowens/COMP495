@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3 Word Web</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <svg width="800" height="600"></svg>
+
+  <script>
+    d3.csv("graph.csv").then(function(data) {
+      const nodes = {};
+      const links = [];
+
+      data.forEach(function(d) {
+        if (!nodes[d.Comic]) nodes[d.Comic] = { name: d.Comic, type: "comic" };
+        if (!nodes[d.Word]) nodes[d.Word] = { name: d.Word, type: "word" };
+        if (!nodes[d.Themes]) nodes[d.Themes] = { name: d.Themes, type: "theme" };
+        
+        links.push({ source: d.Comic, target: d.Word });
+        links.push({ source: d.Comic, target: d.Themes });
+      });
+
+      const svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+      const simulation = d3.forceSimulation(Object.values(nodes))
+        .force("link", d3.forceLink(links).id(d => d.name))
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+      const link = svg.selectAll("line")
+        .data(links)
+        .enter().append("line")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6);
+
+      const node = svg.selectAll("circle")
+        .data(Object.values(nodes))
+        .enter().append("circle")
+        .attr("r", d => d.type === "comic" ? 12 : 8) // Larger radius for comics
+        .attr("fill", d => d.type === "comic" ? "orange" : "steelblue") // Different color for comics
+        .call(drag(simulation));
+
+      const label = svg.selectAll(null)
+        .data(Object.values(nodes))
+        .enter()
+        .append('text')
+        .text(d => d.name)
+        .attr('font-size', 12)
+        .attr('dx', 15)
+        .attr('dy', 4);
+
+      simulation.on("tick", () => {
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+
+        label
+          .attr('x', d => d.x)
+          .attr('y', d => d.y);
+      });
+
+      function drag(simulation) {
+        function dragstarted(event) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        }
+
+        function dragended(event) {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
+        }
+
+        return d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended);
+      }
+    });
+  </script>
+</body>
+</html>
