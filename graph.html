@@ -1,5 +1,4 @@
 <!-- Scrollama - First graph no purple, second graph has purple -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,8 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <svg width="800" height="500"></svg>
+  <!-- Increase the width and height of the SVG -->
+  <svg width="1000" height="700"></svg>
 
   <script>
     // Define a JavaScript object to map comic names to their image sources
@@ -21,7 +21,6 @@
       "Rock": "/index/images/rock_no_bg.png",
       "Mulaney": "/index/images/mulaney_no_bg.png",
       // Specify the image path for each comic
-
     };
 
     d3.csv("standup.csv").then(function(data) {
@@ -79,21 +78,21 @@
       node.filter(d => d.type === "comic")
         .append("image")
         .attr("xlink:href", d => d.image) // Set image source for comic nodes
-        .attr("x", -12) // Adjust x position
-        .attr("y", -12) // Adjust y position
-        .attr("width", 34) // Set image width
-        .attr("height", 34); // Set image height
+        .attr("x", -24) // Adjust x position to center image
+        .attr("y", -24) // Adjust y position to center image
+        .attr("width", 48) // Set image width
+        .attr("height", 48); // Set image height
 
       node.filter(d => d.type !== "comic")
         .append("circle")
-        .attr("r", 8) // Set radius for non-comic nodes
+        .attr("r", 10) // Set larger radius for non-comic nodes
         .attr("fill", d => wordCounts[d.name] > 1 ? "purple" : "steelblue"); // Color non-comic nodes
 
       const label = node.append('text')
         .text(d => d.name)
-        .attr('font-size', 12)
-        .attr('dx', 15)
-        .attr('dy', 4);
+        .attr('font-size', 16) // Increase font size for labels
+        .attr('text-anchor', 'middle') // Center-align text
+        .attr('dy', 24); // Adjust vertical alignment of text
 
       simulation.on("tick", () => {
         link
@@ -104,10 +103,6 @@
 
         node
           .attr("transform", d => `translate(${d.x},${d.y})`); // Update node position using transform attribute
-
-        label
-          .attr('x', 0)
-          .attr('y', 0);
       });
 
       function drag(simulation) {
@@ -135,11 +130,10 @@
       }
     });
   </script>
-
-  <p>Testing</p>
   
 </body>
 </html>
+
 
 
 <!-- 
