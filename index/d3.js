@@ -93,6 +93,49 @@ function createGradientOverlay() {
     return gradientOverlay;
 }
 
+function createThemeColumn(src, themes) {
+    let gill = document.createElement("div");
+    gill.style.backgroundColor = "rgb(126, 122, 128, 0.1)";
+    gill.style.width="17.5%";
+    let gill_head = document.createElement("img");
+    gill_head.src=src;
+    gill_head.style.width = "60%";
+    gill_head.style.height= "17.5%";
+    gill_head.style.objectFit = "cover";
+    gill_head.style.paddingLeft = "20%";
+    gill_head.style.paddingTop = "15%";
+    gill.append(gill_head);
+    let themesArray = document.createElement("div");
+    themesArray.style.display = "flex";
+    themesArray.style.flexDirection = "column";
+    themesArray.style.paddingLeft = "30%";
+    themesArray.style.paddingTop = "5%";
+    themes.forEach((theme) => {
+        console.log(theme);
+        let themeContainer = document.createElement("div");
+        themeContainer.style.color = "white";
+        themeContainer.style.fontSize = "20px";
+        themeContainer.innerHTML = `${theme}`;
+        themesArray.append(themeContainer);
+    })
+    gill.append(themesArray);
+
+    return gill;
+}
+
 function themes() {
     clearMainDiv();
+    let render_div = document.getElementById("main");
+    render_div.style.width = "100%";
+    render_div.style.height = "100%";
+    let gill = createThemeColumn("./images/gill_no_bg.png", ["friend", "time", "play", "dog", "goal", "letter", "metaphor", "life"]);
+    let das = createThemeColumn("./images/das_no_bg.png", ["Indian", "world", "believe", "story", "woman"]);
+    let seb = createThemeColumn("./images/seb_no_bg.png",["woman", "mom", "house/home", "dance", "die", "friend"]);
+    let mul = createThemeColumn("./images/mulaney_no_bg.png",["horse", "wife", "kid", "college", "money", "assembly"]);
+    let ber = createThemeColumn("./images/berlant_no_bg.png",["camera", "life", "woman", "family", "hard"]);
+    let rock = createThemeColumn("./images/rock_no_bg.png",["kid", "white", "black", "woman", "school/bullying", "cop", "fuck/sex", "play", "world"]);
+
+    render_div.append(gill, das, seb, mul, ber, rock);
+
+
 }
