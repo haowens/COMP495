@@ -118,16 +118,30 @@
 					<!-- <p>STEP 1</p> -->
 				</div>
 				<div class="step" data-step="2">
-					<img src="../FSA/FSA_special.svg" alt="SVG Image" width="400">
+					<img src="../FSA/FSA_transcript.svg" alt="SVG Image" width="100%">
 					<!-- <p>STEP 2</p> -->
 				</div>
 				<div class="step" data-step="3">
-					<img src="../FSA/FSA_transcript.svg" alt="SVG Image" width="400">
+					<img src="../FSA/FSA_TM.svg" alt="SVG Image" width="100%">
 					<!-- <p>STEP 3</p> -->
 				</div>
 				<div class="step" data-step="4">
-					<img src="../FSA/FSA_TM.svg" alt="SVG Image" width="400">
+					<img src="../FSA/FSA_VIBE.svg" alt="SVG Image" width="100%">
+					<p>list stuff</p>
+					<p>first web</p>
 					<!-- <p>STEP 4</p> -->
+				</div>
+				<div class="step" data-step="5">
+					<img src="../FSA/FSA_SENTENCES.svg" alt="SVG Image" width="100%">
+					<!-- <p>STEP 3</p> -->
+				</div>
+				<div class="step" data-step="6">
+					<img src="../FSA/FSA_Contextsvg.svg" alt="SVG Image" width="100%">
+					<!-- <p>STEP 3</p> -->
+				</div>
+				<div class="step" data-step="7">
+					<img src="../FSA/FSA_VIBE2.svg" alt="SVG Image" width="100%">
+					<!-- <p>STEP 3</p> -->
 				</div>
 			</article>
 
@@ -192,21 +206,26 @@
 				if (response.direction === "down") {
 					// drawSpecialScreenshots();
 				} else {
-					clearMainDiv();
 					drawSpecialScreenshots();
 				}
 			} else if (response.index === 1) {
 				if (response.direction === "down") {
 					transcripts();
 				} else {
-					clearMainDiv();
 					drawSpecialScreenshots();
+				}
+			} else if (response.index === 2) {
+				if (response.direction === "down") {
+					themes();
+				} else {
+					transcripts();
 				}
 			}
 
 		}
 
 		function init() {
+			drawSpecialScreenshots();
 
 			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
 			handleResize();
