@@ -1,11 +1,27 @@
-function createImageElement(src) {
+function createImageElement(poster_src, src) {
+    let parentDiv = document.createElement("div");
+    let poster = document.createElement("img");
+    // transcript.className = "transcript";
+    parentDiv.style.width = "95%";
+    parentDiv.style.height = "30%";
+    parentDiv.style.display = "flex";
+    parentDiv.style.justifyContent = "space-evenly";
+    poster.src = poster_src;
+    poster.style.width = "100%";    
+    poster.style.objectFit = "cover";
+    poster.style.height = "100%";
+    poster.style.position = "relative";
+    poster.style.zIndex = 0;
     let img = document.createElement("img");
     img.src = src;
-    img.style.width = "100%";
-    img.style.height = "33.4%";
+    img.style.width = "15%";
+    img.style.height= "40%";
     img.style.objectFit = "cover";
-    img.style.margin = 0;
-    return img;
+    img.style.padding = "1rem 1rem";
+    parentDiv.append(img);
+    parentDiv.append(poster);
+    return parentDiv;
+    
 }
 
 function clearMainDiv() {
@@ -16,126 +32,360 @@ function clearMainDiv() {
 function drawSpecialScreenshots() {
     clearMainDiv();
     let render_div = document.getElementById("main");
-    render_div.style.width = "100%";
-    render_div.style.height = "100%";
-    render_div.style.display = "flex";
+    render_div.className = "figureContainer";
+    render_div.style.flexDirection = "row";
 
     let col_ind = document.createElement("div");
+    col_ind.className = "textColumn";
     let col_am = document.createElement("div");
-    col_ind.style.width = "50%";
-    col_am.style.width = "50%";
-    col_ind.style.height = "100%";
-    col_am.style.height = "100%";
+    col_am.className = "textColumn";
 
-    let img_gill = createImageElement("./images/kanan_gill_vibe.webp");
-    let img_das = createImageElement("./images/vir_das_vibe.jpeg");
-    let img_seb = createImageElement("./images/kenny_seb_vibe.jpg");
+    let img_gill = createImageElement("./images/kg.jpeg", data[0].image);
+    let img_das = createImageElement("./images/vd.webp", data[1].image);
+    let img_seb = createImageElement("./images/ks.png", data[2].image);
     col_ind.append(img_gill, img_das, img_seb);
 
-    let img_mul = createImageElement("./images/mulaney_vibe.jpeg");
-    let img_ber = createImageElement("./images/berlant_vibe.webp");
-    let img_roc = createImageElement("./images/rock_vibe.webp");
+    let img_mul = createImageElement("./images/jm.jpeg", data[3].image);
+    let img_ber = createImageElement("./images/berlant_vibe.webp", data[4].image);
+    let img_roc = createImageElement("./images/rock_vibe.webp", data[5].image);
     col_am.append(img_mul, img_ber, img_roc);
 
     render_div.append(col_ind, col_am);
 }
+   
 
-function createTranscriptElement(text) {
+
+function createTranscriptElement(text, src) {
+    let parentDiv = document.createElement("div");
     let transcript = document.createElement("div");
+    // transcript.className = "transcript";
     transcript.innerHTML = `${text}`;
-    transcript.style.width = "100%";
+    transcript.style.width = "87%";    
     transcript.style.fontSize = "16px";
-    transcript.style.height = "33.4%";
-    transcript.style.border = "1px solid #434145"
-    transcript.style.color = "#989799";
+    transcript.style.height = "100%";
+    transcript.style.color = "#7d7d7d";
+    transcript.style.borderBottom = "1px solid #8a8a8a";
     transcript.style.position = "relative";
-    transcript.style.overflow = "hidden";
+    transcript.style.overflow = "scroll";
     transcript.style.zIndex = 0;
+    parentDiv.style.width = "100%";
+    parentDiv.style.height = "30%";
+    parentDiv.style.display = "flex";
+    parentDiv.style.justifyContent = "space-evenly";
+    let img = document.createElement("img");
+    img.src = src;
+    img.style.width = "15%";
+    img.style.height= "40%";
+    img.style.objectFit = "cover";
+    img.style.padding = "1rem 1rem";
+    parentDiv.append(img);
+   
     transcript.appendChild(createGradientOverlay());
-    return transcript;
+    parentDiv.append(transcript);
+    return parentDiv;
 }
 
 function transcripts() {
     clearMainDiv();
     let render_div = document.getElementById("main");
-    render_div.style.width = "100%";
-    render_div.style.height = "100%";
-    render_div.style.display = "flex";
+    render_div.className = "figureContainer";
 
     let col_ind = document.createElement("div");
+    col_ind.className = "textColumn";
     let col_am = document.createElement("div");
-    col_ind.style.width = "50%";
-    col_am.style.width = "50%";
-    col_ind.style.height = "100%";
-    col_am.style.height = "100%";
+    col_am.className = "textColumn";
 
-    let tr_gill = createTranscriptElement("Good evening. Hello. How are you? It's great to be back in India. I've been traveling the world a lot this year, so it's good to be back in Bangalore, where we have no need for small talk. Not a single-- The best thing about India is you can look someone you don't know in the eyes and just fucking walk right past them. You don't deserve interaction. Not so the case in other countries. I was in the North America getting a coffee, which is the national sport. And it's a whole-- When you walk in, you have to first say, Hi. How are you? I'm good, thanks. How are you? I'm good as well. Hot outside, isn't it? It is hot. Then you can begin speaking. In this much time, the population of India has doubled. Don't do small talk. We do only big talk. Talk to an aunty. Hello, beta. Hello. What is your yearly salary? Haven't been away that long. Came back. Everything's different. All the airports now are silent airports. Yeah, they don't make any announcements at the airport anymore. Reason I know that is because they made an announcement... to say that there will not be... announcements. Ladies and gentlemen, we just want to let you know that this will not happen. Except for this one... which we will do every three minutes. They do this to prevent noise pollution. [snickers] India's biggest problem. Country's running out of water. They're, At ");
-    let tr_das = createTranscriptElement("I lost 80% of my mind. It is very freeing. You should see the look on your faces right now, by the way. Oh! Good evening, San Francisco. Are you guys excited, yeah? All right. Well, my name is Vir Das. We\u2019re gonna have such a good time tonight. I\u2019m so excited. It\u2019s gonna be delightful. Oh, this is how I talk now. I just thought it was time to really embrace my roots, you know, and to make my comedy more authentically Indian. And really, what could be more Indian than a fake American accent? I don\u2019t think you understand. I have an opportunity to make history tonight, guys. I can. I can be the first ever Indian who comes to California\u2026 and then leaves. That\u2019s never happened before. Because you guys are sticking around. Until they kick you out. Which, going by the news, is about three weeks from now. Now, I used to work in America in the year 2002. It didn\u2019t go very well, so I left for browner pastures. And then, honestly, I didn\u2019t think about you guys for 15 years. Because, honestly, there is nothing that you can get in America that I can\u2019t get in India. And then my government banned beef and I was like, 'You know, an international career might not be such a bad thing!' Make no mistake. I\u2019m just here for the beef. It\u2019s been a good couple of years for me. I went on my first world tour. I saw the entire world. I went\u2026 Yeah. Would you like to know what 33 countries in the world have in common? \u2013 Would you like to know, yeah? \u2013 Yeah! Two things. Number one, I have now masturbated in all 33 of those countries. Thank you. I\u2019m like the Genghis Khan of the Holiday Inn chain. My DNA is everywhere. If your hotel has a memory foam mattress, I\u2019m the memory. And two, no matter where I went in the entire world, people said the same thing. They said, 'Oh, my God, you\u2019re Indian? I love Indian people. They\u2019re, like, so smart. Indian people, you\u2019re, like,");
-    let tr_seb = createTranscriptElement("Oh my God. Thank you so much Mumbai. Thank you. Thank you. Really. How are you guys doing? Oh shit. Let\u2019s do this. Come on guys. It\u2019s the Royal Opera House, guys. The Royal Opera House. Yeah, it\u2019s a big deal. I know none of you know the history but it\u2019s a big deal. I took bath twice for this. Is that even possible? Apparently it is. Yes. The Royal Opera House, the great deal and it\u2019s a big occasion because I\u2019ve just turned 26. Yeah. I have. I don\u2019t know why people cheer for that. Because they\u2019re like, \u201cHey, he\u2019s going to die soon. Yaay!\u201d Yea, I am going to die soon. Yes, it\u2019s crazy. Like 26\u2026 You won\u2019t believe it, I was 19 once. It\u2019s nice, like at 26. You know, it\u2019s kind of difficult. I don\u2019t dance as much. You know. At 19, I used to dance the best. Because at 19 you don\u2019t care about anyone else. That\u2019s the best way to dance. Dance like no one\u2019s watching applies for women who are great at dancing. Men should stop. Please. Because for men, anything which is not standing is dancing. It\u2019s not a good enough bar, okay. I\u2019m like, \u201cBro, there is music. Dance, no.\u201d \u201cBro, I\u2019m dancing.\u201d That\u2019s not dancing guys. It is just so painful to watch. But at 19 when you go to a club, it\u2019s great. You\u2019re already having fun because you\u2019re already high. Yeah, right? Because at 19 when you go out, one guy will have a great plan, \u201cBro, why are we spending 400 bucks on drinks in the club? When we can drink on the way, bro.\u201d What do you want to drink? \u201cWhatever gets me high fast.\u201d It\u2019s the best. You are just like neat,");
+
+    let tr_gill = createTranscriptElement(data[0].transcript, data[0].image);
+    let tr_das = createTranscriptElement(data[1].transcript, data[1].image);
+    let tr_seb = createTranscriptElement(data[2].transcript, data[2].image);
     col_ind.append(tr_gill, tr_das, tr_seb);
 
-    let tr_mul = createTranscriptElement("Welcome to Radio City Music Hall. It’s time. Any questions? No. Walk with me. Good evening. Hi, I’m John Mulaney, nice to meet you. Jon Brion, ladies and gentlemen. Thank you for coming to see me at Radio City Music Hall. I love to play venues where if the guy that built the venue could see me on the stage, he would be a little bit bummed about it. Look at this. This is so much nicer than what I’m about to do. It’s really… It’s really tragic. What a historic and beautiful and deeply haunted building this is. I keep walking through cold spots being like, “I wonder who that used to be.” I’ve never seen a ghost, by the way. I asked my mom if she’d ever seen a ghost. That’s where we’re at conversation-wise in our relationship as a mother and son, because I’m 35 and I don’t have any children to talk about and she doesn’t understand my career. So I was home for Christmas and we were just eating Triscuits in silence and I was staring at the floor and I was like, “Well, here goes nothing. ‘You ever seen a ghost? And my mom said, “Yes.” Which is the best answer. She said, “I never told you this before but our house, when you were growing up, was haunted.” I said, “Say more right now!” She said, “Outside you and your brother’s room, I used to see the ghost of a little girl in a Victorian nightgown and then she would walk down the hallway and then she would evaporate.” And then my dad said, “Let’s change the subject!” And I think he was just doing that dad-thing of, like, “This is a weird topic and I want to talk about a book I read about World War II.” But the way it came off was that he definitely killed that little girl. “Let’s change the subject! Why are we even talking about Penelope… or whatever her name was? I didn’t kill her! Whoever did kill her only did it to protect her from this world.");
-    let tr_ber = createTranscriptElement("Whoa! Okay, yeah. Good. Okay, don’t embarrass yourself, okay. Ohh, the expectations. Crushing, I would argue. Absolutely crushing, debilitating in every way. I’m gonna move this, ’cause I’m so thin I’ll disappear behind it, so… And then you’ll be like, 'Is that… Is that Kate 'or is that Kate? Right? 'I don’t know who to watch. Is that the comedian, or is that the, uh, the mic stand?' So… So, the cameras. Big night for me. Yeah, really big. So there’s a camera, there’s a camera. Huh! You know, they’re everywhere. They can see you. We can see them. It’s an inherently false, um, moment, right? It’s a little bit scary. They’re… they’re filming. They’re not actually filming. They are, but it’s… Is it… is the camera inherently misogynist? Yes, right, so… Am I… Am I… Do I feel attacked? Yeah. Right, it’s very… Even the language. You know, “We’re shooting her. We shot her.” “We got her. We have her.” Right, it’s a… You know, I feel… Is it scary? Yeah, you know… Is what I do brave? Yeah, you know… It absolutely is. But I was, of course, forced into comedy at a very young age just because of my bone structure. But I did… I chose to stay in it for this, the directness. Right? And I can reach out and I can actually… I’m changing lives, and she’s crying. She’s crying. It’s me, sweetie. You can touch, yeah, yeah. Very sweet. No, that was very sweet. That was very sweet. She was looking up at me, and she was like, “Uh! I grew up with you in my home. “How can… Am I in my living room? What’s going on?” And her friend was like, “Go for it, is the overflow hidden now?? It is god bless. hope someone catches this.");
-    let tr_roc = createTranscriptElement("Yeah. Please. Oh, sit down. Sit yo asses down. Please let me get on with the show. It’s nice to be here. Brooklyn. Here’s my question. You would think… You would think… You would think the cops would occasionally shoot a white kid… just to make it look good. You would think that every couple of months they’d look at their dead n*gga calendar and go… “Oh, my God, we’re up to 16. We gotta shoot a white kid quick.” “Uh, which one?” “The first one you see singing Cardi B.” That’s right. I mean, honestly, I wanna live in a world… with real equality. I wanna live in a world… where an equal amount of white kids are shot every month. An equal world. I wanna see white mothers on TV crying. Standing next to Al Sharpton. Talking about, “We need justice for Chad. We need justice for Chad. He was just coming home from racquetball practice.” I know some people like, “Come on, Chris, man. You go too hard on the cops, man. You’re a celebrity. I’m sure they let you go. I’m sure they’re nice to you, man. You a celebrity.” Yeah, I’m famous, you know. But I’m not, like, Michael Jackson, famous. I’m not famous from miles away. Like, my fame kicks in right about here. You know? When the cops see me walking down the street, they’re like, “N*gga, n*gga, n*gga, n*gga, n*gga… Hey, that’s Chris Rock! Man, you are funny, man. I love Pootie Tang, man.” It’s weird, man. It’s weird. You know, this whole thing with the cops, man, ’cause… You know, as a black man, especially a grown black man, I have a weird relationship with the cops, man. Like, on one hand I’m a black man so I’m like, “Fuck the police.” And on the other hand, I own property. You know, if somebody comes and breaks in my house, I’m not calling the crips. Uh, yo, crips…");
+    let tr_mul = createTranscriptElement(data[3].transcript, data[3].image);
+    let tr_ber = createTranscriptElement(data[4].transcript, data[4].image);
+    let tr_roc = createTranscriptElement(data[5].transcript, data[5].image);
     col_am.append(tr_mul, tr_ber, tr_roc);
     render_div.append(col_ind, col_am);
 }
 
 function createGradientOverlay() {
     let gradientOverlay = document.createElement("div");
-    gradientOverlay.style.position = "absolute";
+    gradientOverlay.style.position = "sticky";
     gradientOverlay.style.bottom = 0;
     gradientOverlay.style.left = 0;
     gradientOverlay.style.width = "100%";
-    gradientOverlay.style.height = "40%";
+    gradientOverlay.style.height = "20%";
     gradientOverlay.style.zIndex = 1;
-    gradientOverlay.style.background = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.35))";
+    gradientOverlay.style.background = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25))";
     return gradientOverlay;
 }
 
-function createThemeColumn(src, themes) {
-    let gill = document.createElement("div");
-    gill.style.backgroundColor = "rgb(126, 122, 128, 0.1)";
-    gill.style.width="17.5%";
-    let gill_head = document.createElement("img");
-    gill_head.src=src;
-    gill_head.style.width = "60%";
-    gill_head.style.height= "17.5%";
-    gill_head.style.objectFit = "cover";
-    gill_head.style.paddingLeft = "20%";
-    gill_head.style.paddingTop = "15%";
-    gill.append(gill_head);
+function createThemesElement(src, themes) {
+    let parentDiv = document.createElement("div");
+    parentDiv.style.width = "100%";
+    parentDiv.style.height = "30%";
+    parentDiv.style.display = "flex";
+    parentDiv.style.alignItems = "center";
+    parentDiv.style.justifyContent = "space-evenly";
+    let img = document.createElement("img");
+    img.src = src;
+    img.style.width = "30%";
+    img.style.height= "80%";
+    img.style.objectFit = "cover";
+    // img.style.padding = "1rem 1rem";
+    parentDiv.append(img);
     let themesArray = document.createElement("div");
+    themesArray.style.paddingLeft = "5%";
     themesArray.style.display = "flex";
     themesArray.style.flexDirection = "column";
-    themesArray.style.paddingLeft = "30%";
-    themesArray.style.paddingTop = "5%";
+    // themesArray.style.alignItems = "center";
+    themesArray.style.justifyContent = "center";
     themes.forEach((theme) => {
-        console.log(theme);
         let themeContainer = document.createElement("div");
         themeContainer.style.color = "white";
-        themeContainer.style.fontSize = "20px";
+        themeContainer.style.fontSize = "18px";
         themeContainer.innerHTML = `${theme}`;
         themesArray.append(themeContainer);
     })
-    gill.append(themesArray);
+    themesArray.style.width = "87%";    
+    themesArray.style.height = "100%";
+    themesArray.style.color = "#7d7d7d";
+    themesArray.style.zIndex = 0;
+   
+    parentDiv.append(themesArray);
+    return parentDiv;
 
-    return gill;
 }
 
 function themes() {
     clearMainDiv();
     let render_div = document.getElementById("main");
-    render_div.style.width = "100%";
-    render_div.style.height = "100%";
-    let gill = createThemeColumn("./images/gill_no_bg.png", ["friend", "time", "play", "dog", "goal", "letter", "metaphor", "life"]);
-    let das = createThemeColumn("./images/das_no_bg.png", ["Indian", "world", "believe", "story", "woman"]);
-    let seb = createThemeColumn("./images/seb_no_bg.png",["woman", "mom", "house/home", "dance", "die", "friend"]);
-    let mul = createThemeColumn("./images/mulaney_no_bg.png",["horse", "wife", "kid", "college", "money", "assembly"]);
-    let ber = createThemeColumn("./images/berlant_no_bg.png",["camera", "life", "woman", "family", "hard"]);
-    let rock = createThemeColumn("./images/rock_no_bg.png",["kid", "white", "black", "woman", "school/bullying", "cop", "fuck/sex", "play", "world"]);
+    render_div.className = "figureContainer";
 
-    render_div.append(gill, das, seb, mul, ber, rock);
+    let col_ind = document.createElement("div");
+    col_ind.className = "textColumn";
+    let col_am = document.createElement("div");
+    col_am.className= "textColumn";
+    col_ind.style.paddingLeft = "3rem";
 
+    let themes_gill = createThemesElement(data[0].image, data[0].tm_themes);
+    let themes_das = createThemesElement(data[1].image, data[1].tm_themes);
+    let themes_seb = createThemesElement(data[2].image, data[2].tm_themes);
+    col_ind.append(themes_gill, themes_das, themes_seb);
 
+    let themes_mul = createThemesElement(data[3].image, data[3].tm_themes);
+    let themes_ber = createThemesElement(data[4].image, data[4].tm_themes);
+    let themes_rock = createThemesElement(data[5].image, data[5].tm_themes);
+    col_am.append(themes_mul, themes_ber, themes_rock);
+    render_div.append(col_ind, col_am);
+}
+
+function ldaWeb() {
+    clearMainDiv();
+
+    let main = document.getElementById("main");
+    main.innerHTML = '';
+
+    let margin = { top: 0, right: 0, bottom: 0, left: 0 },
+      width = window.innerWidth*0.7- margin.left - margin.right,
+      height = window.innerHeight - margin.top - margin.bottom;
+
+    let svg = d3
+      .select("#main")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .style("padding-left", "400px")
+      .attr("fill", "white");
+
+    d3.csv("standup.csv").then(function(data) {
+        const nodes = {};
+        const links = [];
+  
+        data.forEach(function(d) {
+          const comic = d.Comic;
+          const word = d.Word;
+          const themes = d.Themes.split('/'); // Split themes by '/'
+  
+          // Create nodes for comics
+          if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic" };
+  
+          // Create nodes for words and connect comics to words
+          if (!nodes[word]) {
+            nodes[word] = { name: word, type: "word", themes: themes };
+          }
+          links.push({ source: comic, target: word });
+  
+          // Create nodes for themes and connect words to themes
+          themes.forEach(theme => {
+            if (!nodes[theme]) {
+              nodes[theme] = { name: theme, type: "theme" };
+            }
+            links.push({ source: word, target: theme });
+          });
+        });
+  
+        // Convert nodes object to array
+        const nodesArray = Object.values(nodes);
+  
+        // const svg = d3.select("svg"),
+        //   width = +svg.attr("width"),
+        //   height = +svg.attr("height");
+  
+        const simulation = d3.forceSimulation(nodesArray)
+          .force("link", d3.forceLink(links).id(d => d.name))
+          .force("charge", d3.forceManyBody().strength(-50))
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("x", d3.forceX().strength(0.1).x(width / 2))
+          .force("y", d3.forceY().strength(0.1).y(height / 2))
+          .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
+  
+        const link = svg.selectAll("line")
+          .data(links)
+          .enter().append("line")
+          .attr("stroke", "#999")
+          .attr("stroke-opacity", 0.6);
+  
+        const node = svg.selectAll("circle")
+          .data(nodesArray)
+          .enter().append("circle")
+          .attr("r", d => d.type === "comic" ? 12 : (d.type === "word" ? 8 : 5)) // Different radius for comics, words, and themes
+          .attr("fill", d => d.type === "comic" ? "orange" : (d.type === "word" ? "steelblue" : "green")) // Different color for comics, words, and themes
+          .call(drag(simulation));
+  
+        const label = svg.selectAll(null)
+          .data(nodesArray)
+          .enter()
+          .append('text')
+          .text(d => d.name)
+          .attr('font-size', 12)
+          .attr('dx', 15)
+          .attr('dy', 4)
+          .attr('fill', 'black');
+  
+        simulation.on("tick", () => {
+          link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+  
+          node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+  
+          label
+            .attr('x', d => d.x)
+            .attr('y', d => d.y);
+        });
+  
+        function drag(simulation) {
+          function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+          }
+  
+          function dragged(event) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;
+          }
+  
+          function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+          }
+  
+          return d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
+        }
+      });
+
+      main.append(svg);
+}
+
+function createSentencesElement(comedian, text, src) {
+    let parentDiv = document.createElement("div");
+    parentDiv.style.width = "100%";
+    parentDiv.style.height = "30%";
+    parentDiv.style.display = "flex";
+    parentDiv.style.justifyContent = "space-evenly";
+    let sentencesDiv = document.createElement("div");
+    let img = document.createElement("img");
+    img.src = src;
+    img.style.width = "15%";
+    img.style.height= "40%";
+    img.style.objectFit = "cover";
+    img.style.padding = "1rem 1rem";
+    parentDiv.append(img);
+
+    let sentences = text.split("\n"); 
+    sentences.forEach(sentence => {
+        let sentenceElement = document.createElement("div");
+        let wordsToReplace = ["tree"];
+        if (comedian === "gill") {
+            wordsToReplace = data[0].wordsToReplace;
+        } else if (comedian === "das") {
+            wordsToReplace = data[1].wordsToReplace;
+        } else if (comedian === "seb") {
+            wordsToReplace = data[2].wordsToReplace;
+        } else if (comedian === "mulaney") {
+            wordsToReplace = data[3].wordsToReplace;
+        } else if (comedian === "berlant") {
+            wordsToReplace = data[4].wordsToReplace;
+        } else {
+            wordsToReplace = data[5].wordsToReplace;  
+        }
+
+        wordsToReplace.forEach(word => {
+            let boldSentence = sentence.replace(new RegExp(`\\b${word}\\b`, 'g'), `<b style='color:orange;'>${word}</b>`);
+            sentence = boldSentence;
+        });
+        
+        sentenceElement.innerHTML = sentence;
+        sentencesDiv.appendChild(sentenceElement); 
+    });
+
+    sentencesDiv.style.width = "87%";    
+    sentencesDiv.style.fontSize = "16px";
+    sentencesDiv.style.height = "100%";
+    sentencesDiv.style.color = "#7d7d7d";
+    sentencesDiv.style.borderBottom = "1px solid #8a8a8a";
+    sentencesDiv.style.position = "relative";
+    sentencesDiv.style.overflow = "scroll";
+    sentencesDiv.style.zIndex = 0;
+    sentencesDiv.appendChild(createGradientOverlay());
+    parentDiv.appendChild(sentencesDiv);
+    return parentDiv;
+}
+
+function sentences() {
+    clearMainDiv();
+    let render_div = document.getElementById("main");
+    render_div.className="figureContainer";
+
+    let col_ind = document.createElement("div");
+    col_ind.className = "textColumn";
+    let col_am = document.createElement("div");
+    col_am.className= "textColumn";
+
+    let tr_gill = createSentencesElement("gill", data[0].sentences, data[0].image);
+    let tr_das = createSentencesElement("das", data[1].sentences, data[1].image);
+    let tr_seb = createSentencesElement("seb", data[2].sentences, data[2].image);
+    col_ind.append(tr_gill, tr_das, tr_seb);
+
+    let tr_mul = createSentencesElement("mulaney", data[3].sentences, data[3].image);
+    let tr_ber = createSentencesElement("berlant", data[4].sentences, data[4].image);
+    let tr_roc = createSentencesElement("rock", data[5].sentences, data[5].image);
+    col_am.append(tr_mul, tr_ber, tr_roc);
+    render_div.append(col_ind, col_am);
 }

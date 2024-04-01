@@ -157,6 +157,7 @@
 	<script src="https://unpkg.com/d3@5.9.1/dist/d3.min.js"></script>
 	<script src="./scrollama.min.js"></script>
 	<script src="d3.js"></script>
+	<script src="data.js"></script>
 	<script>
 		// using d3 for convenience
 		var main = d3.select("main");
@@ -202,7 +203,7 @@
 				console.log(response.index)
 				console.log(response.direction)
 				if (response.direction === "down") {
-					// drawSpecialScreenshots();
+					drawSpecialScreenshots();
 				} else {
 					drawSpecialScreenshots();
 				}
@@ -216,14 +217,26 @@
 				if (response.direction === "down") {
 					themes();
 				} else {
-					transcripts();
+					themes();
+				}
+			} else if (response.index === 3) {
+				if (response.direction === "down") {
+					ldaWeb();
+				} else {
+					ldaWeb();
+				}
+			} else if (response.index === 4) {
+				if (response.direction === "down") {
+					sentences();
+				} else {
+					sentences();
 				}
 			}
+
 
 		}
 
 		function init() {
-			drawSpecialScreenshots();
 
 			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
 			handleResize();
