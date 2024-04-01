@@ -177,6 +177,7 @@
     d3.csv("standup.csv").then(function(data) {
       const nodes = {};
       const links = [];
+      const wordCounts = {};
 
       const nameCounts = {}; // Object to store counts of node names
 
@@ -185,14 +186,33 @@
         const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
         const themes = d.Themes.split('/'); // Split themes by '/'
 
-        // Create nodes for comics
-        if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic" };
-
-        // Create nodes for words and connect comics to words
-        if (!nodes[word]) {
-          nodes[word] = { name: word, type: "word", themes: themes };
+                // If the word hasn't been encountered for this comic yet, count it
+        if (!wordCounts[word]) {
+          wordCounts[word] = { count: 0, comics: {} };
         }
-        links.push({ source: comic, target: word });
+        if (!wordCounts[word].comics[comic]) {
+          wordCounts[word].comics[comic] = true;
+          wordCounts[word].count++;
+
+          // Create nodes for comics
+          if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
+
+          // Create nodes for words and connect comics to words
+          if (!nodes[word]) {
+            nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
+          }
+          links.push({ source: comic, target: word });
+        }
+
+
+        // // Create nodes for comics
+        // if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic" };
+
+        // // Create nodes for words and connect comics to words
+        // if (!nodes[word]) {
+        //   nodes[word] = { name: word, type: "word", themes: themes };
+        // }
+        // links.push({ source: comic, target: word });
 
         // Create nodes for themes and connect words to themes
         themes.forEach(theme => {
@@ -241,13 +261,14 @@
         .attr("width", 48) // Set image width
         .attr("height", 48); // Set image height
 
-        console.log(nameCounts)
+        console.log(wordCounts)
       node.filter(d => d.type !== "comic") // Filter to exclude comics
         .append("circle")
         // .attr("r", 8) // Set radius for other nodes
         .attr("r", d => d.type === "comic" ? 15 : (d.type === "word" ? 8 : 5)) // Set larger radius for all words
         // .attr("fill", d => nameCounts[d.name] >= 2 ? "purple" : "steelblue"); // Color nodes based on count
-        .attr("fill", d => nameCounts[d.name] >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
+        // .attr("fill", d => wordCounts[d.name].count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
+        .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
       
         node.append('text')
         .text(d => d.name)
