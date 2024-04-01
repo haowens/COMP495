@@ -11,6 +11,17 @@
   <svg width="900" height="600"></svg>
 
   <script>
+        // Define a JavaScript object to map comic names to their image sources
+        const comicImages = {
+      "Kate Berlant": "/index/images/berlant_no_bg.png",
+      "Kanan": "/index/images/gill_no_bg.png",
+      "Kenny": "/index/images/seb_no_bg.png",
+      "Vir": "/index/images/das_no_bg.png",
+      "Rock": "/index/images/rock_no_bg.png",
+      "Mulaney": "/index/images/mulaney_no_bg.png",
+      // Specify the image path for each comic
+    };
+    
     d3.csv("standup.csv").then(function(data) {
       const nodes = {};
       const links = [];
