@@ -231,6 +231,20 @@
 				} else {
 					sentences();
 				}
+			} else if (response.index === 5) {
+				if (response.direction === "down") {
+					clearMainDiv();
+					context();
+				} else {
+					context();
+				}
+			} else if (response.index === 6) {
+				if (response.direction === "down") {
+					clearMainDiv();
+					themes();
+				} else {
+					themes();
+				}
 			}
 
 
