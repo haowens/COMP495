@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,308 +9,316 @@
 <body>
   <svg width="900" height="600"></svg>
 
-  <script>
-        // Define a JavaScript object to map comic names to their image sources
-        const comicImages = {
-      "Kate Berlant": "/index/images/berlant_no_bg.png",
-      "Kanan": "/index/images/gill_no_bg.png",
-      "Kenny": "/index/images/seb_no_bg.png",
-      "Vir": "/index/images/das_no_bg.png",
-      "Rock": "/index/images/rock_no_bg.png",
-      "Mulaney": "/index/images/mulaney_no_bg.png",
-      // Specify the image path for each comic
-    };
+  <script> 
+            // Define a JavaScript object to map comic names to their image sources
+            const comicImages = {
+          "Kate Berlant": "/index/images/berlant_no_bg.png",
+          "Kanan": "/index/images/gill_no_bg.png",
+          "Kenny": "/index/images/seb_no_bg.png",
+          "Vir": "/index/images/das_no_bg.png",
+          "Rock": "/index/images/rock_no_bg.png",
+          "Mulaney": "/index/images/mulaney_no_bg.png",
+          // Specify the image path for each comic
+        };
+        
+        d3.csv("standup.csv").then(function(data) {
+          const nodes = {};
+          const links = [];
+          const wordCounts = {};
     
-    d3.csv("standup.csv").then(function(data) {
-      const nodes = {};
-      const links = [];
-      const wordCounts = {};
-
-      const nameCounts = {}; // Object to store counts of node names
-
-      data.forEach(function(d) {
-        const comic = d.Comic;
-        const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
-        const themes = d.Themes.split('/'); // Split themes by '/'
-
-                // If the word hasn't been encountered for this comic yet, count it
-        if (!wordCounts[word]) {
-          wordCounts[word] = { count: 0, comics: {} };
-        }
-        if (!wordCounts[word].comics[comic]) {
-          wordCounts[word].comics[comic] = true;
-          wordCounts[word].count++;
-
-          // Create nodes for comics
-          if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
-
-          // Create nodes for words and connect comics to words
-          if (!nodes[word]) {
-            nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
-            // nodes[word] = { name: word, type: "word", count: wordCounts[word].count};
-          }
-          links.push({ source: comic, target: word });
-        }
-
-        themes.forEach(theme => {
-          if (!nodes[theme]) {
-            nodes[theme] = { name: theme, type: "theme" };
-          }
-          links.push({ source: word, target: theme });
-        });
-
-        // Increment count for node name
-        nameCounts[word] = (nameCounts[word] || 0) + 1;
-      });
-
-      // Convert nodes object to array
-      const nodesArray = Object.values(nodes);
-
-      const svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
-
-      const simulation = d3.forceSimulation(nodesArray)
-        .force("link", d3.forceLink(links).id(d => d.name))
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX().strength(0.1).x(width / 2))
-        .force("y", d3.forceY().strength(0.1).y(height / 2))
-        .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
-
-      const link = svg.selectAll("line")
-        .data(links)
-        .enter().append("line")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6);
-
-    const node = svg.selectAll(".node")
-        .data(nodesArray)
-        .enter().append("g")
-        .attr("class", "node")
-        .call(drag(simulation)); // Enable dragging for nodes
-
-      node.filter(d => d.type === "comic")
-        .append("image")
-        .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
-        .attr("x", -24) // Adjust x position to center image
-        .attr("y", -24) // Adjust y position to center image
-        .attr("width", 48) // Set image width
-        .attr("height", 48); // Set image height
-
-      node.filter(d => d.type !== "comic") // Filter to exclude comics
-        .append("circle")
-        // .attr("r", 8) // Set radius for other nodes
-        .attr("r", d => d.type === "comic" ? 15 : (d.type === "word" ? 8 : 5)) // Set larger radius for all words
-        // .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
-        .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue" )
-
-      // node.filter(d => d.type !== "comic") // Filter to exclude comics
-      //   .append("circle")
-      //   // .attr("r", 8) // Set radius for other nodes
-      //   .attr("r", d => d.type === "theme" ? 4 : 2) // Set larger radius for all words
-      //   // .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
-      //   .attr("fill", d => d.type === "theme" ? "green" : (wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue"))
-      
-    node.filter(d => d.type === "theme")
-    .append("circle")
-    .attr("r", 4) // Set radius for theme nodes
-    .attr("fill", "green"); // Set fill color for theme nodes
-
-      
-        node.append('text')
-        .text(d => d.name)
-        .attr('font-size', 12)
-        .attr('text-anchor', 'middle')
-        .attr('dy', 24); // Adjust vertical alignment of text
-
-      simulation.on("tick", () => {
-        link
-          .attr("x1", d => d.source.x)
-          .attr("y1", d => d.source.y)
-          .attr("x2", d => d.target.x)
-          .attr("y2", d => d.target.y);
-
-        node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
-      });
-
-      function drag(simulation) {
-        function dragstarted(event) {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          event.subject.fx = event.subject.x;
-          event.subject.fy = event.subject.y;
-        }
-
-        function dragged(event) {
-          event.subject.fx = event.x;
-          event.subject.fy = event.y;
-        }
-
-        function dragended(event) {
-          if (!event.active) simulation.alphaTarget(0);
-          event.subject.fx = null;
-          event.subject.fy = null;
-        }
-
-        return d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended);
-      }
-    });
-  </script>
-</body>
-</html> 
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D3 Word Web Subthemes</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-</head>
-<body>
-  <svg width="900" height="600"></svg>
-
-  <script>
-        // Define a JavaScript object to map comic names to their image sources
-        const comicImages = {
-      "Kate Berlant": "/index/images/berlant_no_bg.png",
-      "Kanan": "/index/images/gill_no_bg.png",
-      "Kenny": "/index/images/seb_no_bg.png",
-      "Vir": "/index/images/das_no_bg.png",
-      "Rock": "/index/images/rock_no_bg.png",
-      "Mulaney": "/index/images/mulaney_no_bg.png",
-      // Specify the image path for each comic
-    };
+          const nameCounts = {}; // Object to store counts of node names
     
-    d3.csv("standup.csv").then(function(data) {
-      const nodes = {};
-      const links = [];
-      const wordCounts = {};
+          data.forEach(function(d) {
+            const comic = d.Comic;
+            const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
+            const themes = d.Themes.split('/'); // Split themes by '/'
+    
+            // If the word hasn't been encountered for this comic yet, count it
+            if (!wordCounts[word]) {
+              wordCounts[word] = { count: 0, comics: {} };
+            }
+            if (!wordCounts[word].comics[comic]) {
+              wordCounts[word].comics[comic] = true;
+              wordCounts[word].count++;
+    
+              // Create nodes for comics
+              if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
+    
+              // Create nodes for words and connect comics to words
+              if (!nodes[word]) {
+                nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
+              }
+              links.push({ source: comic, target: word });
+            }
+            console.log(nodes, 'are the nodes')
+            themes.forEach(theme => {
+              if (!nodes[theme]) {
+                nodes[theme] = { name: theme, type: "theme" };
+              }
+              links.push({ source: word, target: theme });
+            });
+    
+            // Increment count for node name
+            nameCounts[word] = (nameCounts[word] || 0) + 1;
+          });
+    
+          // Convert nodes object to array
+          const nodesArray = Object.values(nodes);
+    
+          const svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+    
+          const simulation = d3.forceSimulation(nodesArray)
+            .force("link", d3.forceLink(links).id(d => d.name))
+            .force("charge", d3.forceManyBody().strength(-50))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("x", d3.forceX().strength(0.1).x(width / 2))
+            .force("y", d3.forceY().strength(0.1).y(height / 2))
+            .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
+    
+          const link = svg.selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("stroke", "#999")
+            .attr("stroke-opacity", 0.6);
+    
+        const node = svg.selectAll(".node")
+            .data(nodesArray)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(drag(simulation)); // Enable dragging for nodes
+    
+          node.filter(d => d.type === "comic")
+            .append("image")
+            .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
+            .attr("x", -24) // Adjust x position to center image
+            .attr("y", -24) // Adjust y position to center image
+            .attr("width", 48) // Set image width
+            .attr("height", 48); // Set image height
+    
+            node.filter(d => d.type !== "comic") // Filter to exclude comics
+  .append("circle")
+  .attr("r", d => d.type === "word" ? 8 : 4) // Set larger radius for all words
+  .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
+  .on("click", function(event, d) {
+    if (d.type === "comic") return; // Only apply the filter to word/theme nodes
+    const clickedNode = d3.select(this);
+    const currentState = clickedNode.attr("data-state");
+    const connectedNodes = [d, ...links.filter(link => link.source === d.name || link.target === d.name).map(link => nodesArray.find(node => node.name === (link.source === d.name ? link.target : link.source)))];
 
-      const nameCounts = {}; // Object to store counts of node names
-
-      data.forEach(function(d) {
-        const comic = d.Comic;
-        const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
-        const themes = d.Themes.split('/'); // Split themes by '/'
-
-                // If the word hasn't been encountered for this comic yet, count it
-        if (!wordCounts[word]) {
-          wordCounts[word] = { count: 0, comics: {} };
-        }
-        if (!wordCounts[word].comics[comic]) {
-          wordCounts[word].comics[comic] = true;
-          wordCounts[word].count++;
-
-          // Create nodes for comics
-          if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
-
-          // Create nodes for words and connect comics to words
-          if (!nodes[word]) {
-            nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
-          }
-          links.push({ source: comic, target: word });
-        }
-
-        themes.forEach(theme => {
-          if (!nodes[theme]) {
-            nodes[theme] = { name: theme, type: "theme" };
-          }
-          links.push({ source: word, target: theme });
-        });
-
-        // Increment count for node name
-        nameCounts[word] = (nameCounts[word] || 0) + 1;
-      });
-
-      // Convert nodes object to array
-      const nodesArray = Object.values(nodes);
-
-      const svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
-
-      const simulation = d3.forceSimulation(nodesArray)
-        .force("link", d3.forceLink(links).id(d => d.name))
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("x", d3.forceX().strength(0.1).x(width / 2))
-        .force("y", d3.forceY().strength(0.1).y(height / 2))
-        .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
-
-      const link = svg.selectAll("line")
-        .data(links)
-        .enter().append("line")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6);
-
-    const node = svg.selectAll(".node")
-        .data(nodesArray)
-        .enter().append("g")
-        .attr("class", "node")
-        .call(drag(simulation)); // Enable dragging for nodes
-
-      node.filter(d => d.type === "comic")
-        .append("image")
-        .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
-        .attr("x", -24) // Adjust x position to center image
-        .attr("y", -24) // Adjust y position to center image
-        .attr("width", 48) // Set image width
-        .attr("height", 48); // Set image height
-
-        console.log(nodesArray)
-      node.filter(d => d.type !== "comic") // Filter to exclude comics
-        .append("circle")
-        // .attr("r", 8) // Set radius for other nodes
-        .attr("r", d => d.type === "comic" ? 15 : (d.type === "word" ? 8 : 5)) // Set larger radius for all words
-        .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
-      
-        node.append('text')
-        .text(d => d.name)
-        .attr('font-size', 12)
-        .attr('text-anchor', 'middle')
-        .attr('dy', 24); // Adjust vertical alignment of text
-
-      simulation.on("tick", () => {
-        link
-          .attr("x1", d => d.source.x)
-          .attr("y1", d => d.source.y)
-          .attr("x2", d => d.target.x)
-          .attr("y2", d => d.target.y);
-
-        node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
-      });
-
-      function drag(simulation) {
-        function dragstarted(event) {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          event.subject.fx = event.subject.x;
-          event.subject.fy = event.subject.y;
-        }
-
-        function dragged(event) {
-          event.subject.fx = event.x;
-          event.subject.fy = event.y;
-        }
-
-        function dragended(event) {
-          if (!event.active) simulation.alphaTarget(0);
-          event.subject.fx = null;
-          event.subject.fy = null;
-        }
-
-        return d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended);
-      }
+    const greenNodes = svg.selectAll(".node circle").filter(e => e.type === "theme" && !connectedNodes.includes(e));
+    const greenLinks = svg.selectAll("line").filter(e => {
+      const sourceNode = nodesArray.find(node => node.name === e.source);
+      const targetNode = nodesArray.find(node => node.name === e.target);
+      return !(connectedNodes.includes(sourceNode) || connectedNodes.includes(targetNode));
     });
-  </script>
+
+    if (currentState === "hidden") {
+      greenNodes.style("display", "block");
+      greenLinks.style("visibility", "visible");
+      clickedNode.attr("data-state", "shown");
+    } else {
+      greenNodes.style("display", "none");
+      greenLinks.style("visibility", "hidden");
+      clickedNode.attr("data-state", "hidden");
+    }
+  });
+
+            node.append('text')
+            .text(d => d.name)
+            .attr('font-size', 12)
+            .attr('text-anchor', 'middle')
+            .attr('dy', 24); // Adjust vertical alignment of text
+    
+          simulation.on("tick", () => {
+            link
+              .attr("x1", d => d.source.x)
+              .attr("y1", d => d.source.y)
+              .attr("x2", d => d.target.x)
+              .attr("y2", d => d.target.y);
+    
+            node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
+          });
+    
+          function drag(simulation) {
+            function dragstarted(event) {
+              if (!event.active) simulation.alphaTarget(0.3).restart();
+              event.subject.fx = event.subject.x;
+              event.subject.fy = event.subject.y;
+            }
+    
+            function dragged(event) {
+              event.subject.fx = event.x;
+              event.subject.fy = event.y;
+            }
+    
+            function dragended(event) {
+              if (!event.active) simulation.alphaTarget(0);
+              event.subject.fx = null;
+              event.subject.fy = null;
+            }
+    
+            return d3.drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended);
+          }
+        });
+      </script>
 </body>
-</html> -->
+</html>
+
+
+
+
+<!-- //  <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//   <meta charset="UTF-8">
+//   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//   <title>D3 Word Web Subthemes</title>
+//   <script src="https://d3js.org/d3.v7.min.js"></script>
+// </head>
+// <body>
+//   <svg width="900" height="600"></svg>
+
+//   <script> -->
+<!--   
+//         // Define a JavaScript object to map comic names to their image sources
+//         const comicImages = {
+//       "Kate Berlant": "/index/images/berlant_no_bg.png",
+//       "Kanan": "/index/images/gill_no_bg.png",
+//       "Kenny": "/index/images/seb_no_bg.png",
+//       "Vir": "/index/images/das_no_bg.png",
+//       "Rock": "/index/images/rock_no_bg.png",
+//       "Mulaney": "/index/images/mulaney_no_bg.png",
+//       // Specify the image path for each comic
+//     };
+    
+//     d3.csv("standup.csv").then(function(data) {
+//       const nodes = {};
+//       const links = [];
+//       const wordCounts = {};
+
+//       const nameCounts = {}; // Object to store counts of node names
+
+//       data.forEach(function(d) {
+//         const comic = d.Comic;
+//         const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
+//         const themes = d.Themes.split('/'); // Split themes by '/'
+
+//         // If the word hasn't been encountered for this comic yet, count it
+//         if (!wordCounts[word]) {
+//           wordCounts[word] = { count: 0, comics: {} };
+//         }
+//         if (!wordCounts[word].comics[comic]) {
+//           wordCounts[word].comics[comic] = true;
+//           wordCounts[word].count++;
+
+//           // Create nodes for comics
+//           if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
+
+//           // Create nodes for words and connect comics to words
+//           if (!nodes[word]) {
+//             nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
+//           }
+//           links.push({ source: comic, target: word });
+//         }
+//         console.log(nodes, 'are the nodes')
+//         themes.forEach(theme => {
+//           if (!nodes[theme]) {
+//             nodes[theme] = { name: theme, type: "theme" };
+//           }
+//           links.push({ source: word, target: theme });
+//         });
+
+//         // Increment count for node name
+//         nameCounts[word] = (nameCounts[word] || 0) + 1;
+//       });
+
+//       // Convert nodes object to array
+//       const nodesArray = Object.values(nodes);
+
+//       const svg = d3.select("svg"),
+//         width = +svg.attr("width"),
+//         height = +svg.attr("height");
+
+//       const simulation = d3.forceSimulation(nodesArray)
+//         .force("link", d3.forceLink(links).id(d => d.name))
+//         .force("charge", d3.forceManyBody().strength(-50))
+//         .force("center", d3.forceCenter(width / 2, height / 2))
+//         .force("x", d3.forceX().strength(0.1).x(width / 2))
+//         .force("y", d3.forceY().strength(0.1).y(height / 2))
+//         .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
+
+//       const link = svg.selectAll("line")
+//         .data(links)
+//         .enter().append("line")
+//         .attr("stroke", "#999")
+//         .attr("stroke-opacity", 0.6);
+
+//     const node = svg.selectAll(".node")
+//         .data(nodesArray)
+//         .enter().append("g")
+//         .attr("class", "node")
+//         .call(drag(simulation)); // Enable dragging for nodes
+
+//       node.filter(d => d.type === "comic")
+//         .append("image")
+//         .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
+//         .attr("x", -24) // Adjust x position to center image
+//         .attr("y", -24) // Adjust y position to center image
+//         .attr("width", 48) // Set image width
+//         .attr("height", 48); // Set image height
+
+//         console.log(nodesArray)
+//       node.filter(d => d.type !== "comic") // Filter to exclude comics
+//         .append("circle")
+//         // .attr("r", 8) // Set radius for other nodes
+//         .attr("r", d => d.type  === "word" ? 8 : 4) // Set larger radius for all words
+//         .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
+      
+//         node.append('text')
+//         .text(d => d.name)
+//         .attr('font-size', 12)
+//         .attr('text-anchor', 'middle')
+//         .attr('dy', 24); // Adjust vertical alignment of text
+
+//       simulation.on("tick", () => {
+//         link
+//           .attr("x1", d => d.source.x)
+//           .attr("y1", d => d.source.y)
+//           .attr("x2", d => d.target.x)
+//           .attr("y2", d => d.target.y);
+
+//         node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
+//       });
+
+//       function drag(simulation) {
+//         function dragstarted(event) {
+//           if (!event.active) simulation.alphaTarget(0.3).restart();
+//           event.subject.fx = event.subject.x;
+//           event.subject.fy = event.subject.y;
+//         }
+
+//         function dragged(event) {
+//           event.subject.fx = event.x;
+//           event.subject.fy = event.y;
+//         }
+
+//         function dragended(event) {
+//           if (!event.active) simulation.alphaTarget(0);
+//           event.subject.fx = null;
+//           event.subject.fy = null;
+//         }
+
+//         return d3.drag()
+//           .on("start", dragstarted)
+//           .on("drag", dragged)
+//           .on("end", dragended);
+//       }
+//     });
+//   </script>
+// </body>
+// </html> -->
