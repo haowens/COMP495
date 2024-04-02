@@ -25,6 +25,7 @@
           const nodes = {};
           const links = [];
           const wordCounts = {};
+          word_list = [];
     
           const nameCounts = {}; // Object to store counts of node names
     
@@ -32,7 +33,16 @@
             const comic = d.Comic;
             const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
             const themes = d.Themes.split('/'); // Split themes by '/'
-    
+            
+            if(!word_list.includes(word)){
+              word_list.push(word);
+            }
+            
+
+            if (word_list.includes(themes)){
+              return;
+            }
+            console.log('comic: ', comic, 'word: ', word, 'themes: ', themes )
             // If the word hasn't been encountered for this comic yet, count it
             if (!wordCounts[word]) {
               wordCounts[word] = { count: 0, comics: {} };
@@ -43,14 +53,18 @@
     
               // Create nodes for comics
               if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
-    
+              
+
               // Create nodes for words and connect comics to words
               if (!nodes[word]) {
                 nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
               }
+              
               links.push({ source: comic, target: word });
             }
-            console.log(nodes, 'are the nodes')
+            
+            console.log(word, 'is word')
+            console.log(themes)
             themes.forEach(theme => {
               if (!nodes[theme]) {
                 nodes[theme] = { name: theme, type: "theme" };
@@ -61,7 +75,12 @@
             // Increment count for node name
             nameCounts[word] = (nameCounts[word] || 0) + 1;
           });
-    
+
+          console.log(word_list)
+
+
+          // console.log('Filtered links:', filteredLinks);
+
           // Convert nodes object to array
           const nodesArray = Object.values(nodes);
     
@@ -99,53 +118,45 @@
     
 
 
-          node.filter(d => d.type !== "comic") // Filter to exclude comics
-            .append("circle")
-            .attr("r", d => d.type === "word" ? 8 : 4) // Set larger radius for all words
-            .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
-            .on("click", function(event, d) {
-            if (d.type === "comic") return; // Only apply the filter to word/theme nodes
+            node.filter(d => d.type !== "comic") // Filter to exclude comics
+  .append("circle")
+  .attr("r", d => d.type === "word" ? 8 : 4) // Set larger radius for all words
+  .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : (d.type === "word" ? "steelblue" : "green"))
+  .on("click", function(event, d) {
+    console.log(d.type)
+    if (d.type === "comic") return; // Only apply the filter to word/theme nodes
 
-            const clickedNode = d3.select(this);
-            const currentState = clickedNode.attr("data-state");
+    const clickedNode = d3.select(this);
+    const currentState = clickedNode.attr("data-state");
 
-            const parentNodes = [d];
-            const connectedLinks = links.filter(link => {
-              if (link.source === d.name) {
-                parentNodes.push(nodesArray.find(node => node.name === link.target));
-                return true;
-              } else if (link.target === d.name) {
-                parentNodes.push(nodesArray.find(node => node.name === link.source));
-                return true;
-              }
-              return false;
-            });
+    const childNodes = links.filter(link =>
+      link.source === d.name || link.target === d.name
+    ).flatMap(link =>
+      [link.source, link.target].map(name =>
+        nodesArray.find(node => node.name === name)
+      )
+    );
 
-            const connectedNodes = parentNodes.concat(
-              connectedLinks.flatMap(link =>
-                [link.source, link.target].map(name =>
-                  nodesArray.find(node => node.name === name)
-                )
-              )
-            );
+    const connectedNodes = [d].concat(childNodes);
+    const connectedLinks = links.filter(link =>
+      connectedNodes.includes(nodesArray.find(node => node.name === link.source)) &&
+      connectedNodes.includes(nodesArray.find(node => node.name === link.target))
+    );
 
-            const greenNodes = svg.selectAll(".node circle").filter(e => e.type === "theme" && !connectedNodes.includes(e));
-            const greenLinks = svg.selectAll("line").filter(e => {
-              const sourceNode = nodesArray.find(node => node.name === e.source);
-              const targetNode = nodesArray.find(node => node.name === e.target);
-              return !(connectedNodes.includes(sourceNode) || connectedNodes.includes(targetNode));
-            });
+    const greenNodes = svg.selectAll(".node circle").filter(e => e.type === "theme" && !connectedNodes.includes(e));
+    const greenLinks = svg.selectAll("line").filter(e => !connectedLinks.includes(e));
 
-            if (currentState === "hidden") {
-              greenNodes.style("display", "block");
-              greenLinks.style("visibility", "visible");
-              clickedNode.attr("data-state", "shown");
-            } else {
-              greenNodes.style("display", "none");
-              greenLinks.style("visibility", "hidden");
-              clickedNode.attr("data-state", "hidden");
-            }
-          });
+    if (currentState === "hidden") {
+      greenNodes.style("display", "block");
+      greenLinks.style("visibility", "visible");
+      clickedNode.attr("data-state", "shown");
+    } else {
+      greenNodes.style("display", "none");
+      greenLinks.style("visibility", "hidden");
+      clickedNode.attr("data-state", "hidden");
+    }
+  });
+
 
             node.append('text')
             .text(d => d.name)
