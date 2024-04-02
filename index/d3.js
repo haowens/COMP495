@@ -129,13 +129,13 @@ function createThemesElement(src, themes) {
     parentDiv.style.justifyContent = "space-evenly";
     let img = document.createElement("img");
     img.src = src;
-    img.style.width = "30%";
+    img.style.width = "40%";
     img.style.height= "80%";
     img.style.objectFit = "cover";
     // img.style.padding = "1rem 1rem";
     parentDiv.append(img);
     let themesArray = document.createElement("div");
-    themesArray.style.paddingLeft = "5%";
+    themesArray.style.paddingLeft = "9%";
     themesArray.style.display = "flex";
     themesArray.style.flexDirection = "column";
     // themesArray.style.alignItems = "center";
@@ -147,7 +147,7 @@ function createThemesElement(src, themes) {
         themeContainer.innerHTML = `${theme}`;
         themesArray.append(themeContainer);
     })
-    themesArray.style.width = "87%";    
+    themesArray.style.width = "70%";    
     themesArray.style.height = "100%";
     themesArray.style.color = "#7d7d7d";
     themesArray.style.zIndex = 0;
@@ -166,7 +166,8 @@ function themes() {
     col_ind.className = "textColumn";
     let col_am = document.createElement("div");
     col_am.className= "textColumn";
-    col_ind.style.paddingLeft = "3rem";
+    col_ind.style.paddingLeft = "10rem";
+    col_am.style.paddingRight = "5rem";
 
     let themes_gill = createThemesElement(data[0].image, data[0].tm_themes);
     let themes_das = createThemesElement(data[1].image, data[1].tm_themes);
