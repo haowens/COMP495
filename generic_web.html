@@ -280,32 +280,34 @@
           console.log(d.type);
           // Check if the clicked node is a 'word' node
           if (d.type === "word") {
+
+            const themeNodes = 
             // Toggle visibility of 'theme' nodes associated with the clicked 'word' node
             node.filter(node => node.type === "theme" && node.parent === d.name)
               .append("circle")
               .attr("r", 5) // Set larger radius for all words
               .attr("fill", "green")
 
-
-              const themeLinks = links.filter(link => link.target.type === 'theme' && link.target.parent === d.name);
+            const themeLinks = links.filter(link => link.target.type === 'theme' && link.target.parent === d.name);
 
             console.log(themeLinks)
-            
-//             const themeLinks = node.filter(node => node.type === "theme" && node.parent === d.name)
-//             console.log(d.name)
 
-//             console.log(themeLinks)
-
-const linkTheme = svg.selectAll("line")
-  .data(themeLinks)
-  .enter()
-  .append("line")
-  .attr("stroke", "#999")
-  .attr("stroke-opacity", 0.6);
+            const linkTheme = svg.selectAll("line")
+              .data(themeLinks)
+              .enter()
+              .append("line")
+              .attr("stroke", "#999")
+              .attr("stroke-opacity", 0.6);
 
           }
         });
 
+        // Append text for 'word' nodes
+wordNodes.append('text')
+    .text(d => d.name)
+    .attr('font-size', 12)
+    .attr('text-anchor', 'middle')
+    .attr('dy', 24); // Adjust vertical alignment of text
       // Filter nodes to only include 'theme' nodes
       // const themeNodes = node.filter(d => d.type === "theme");
 
