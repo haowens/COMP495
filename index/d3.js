@@ -199,8 +199,18 @@ function ldaWeb() {
     .append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
-    .style("padding-left", "400px")
+    .style("padding-left", "200px")
     .attr("fill", "white");
+
+    const comicImages = {
+      "Kate Berlant": "/index/images/berlant_no_bg.png",
+      "Kanan": "/index/images/gill_no_bg.png",
+      "Kenny": "/index/images/seb_no_bg.png",
+      "Vir": "/index/images/das_no_bg.png",
+      "Rock": "/index/images/rock_no_bg.png",
+      "Mulaney": "/index/images/mulaney_no_bg.png",
+      // Specify the image path for each comic
+    };
 
     d3.csv("standup.csv").then(function (data) {
       const nodes = {};
@@ -219,7 +229,6 @@ function ldaWeb() {
           word_list.push(word);
         }
 
-
         if (word_list.includes(themes)) {
           return;
         }
@@ -234,7 +243,6 @@ function ldaWeb() {
           // Create nodes for comics
           if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
 
-
           // Create nodes for words and connect comics to words
           if (!nodes[word] || nodes[word].type === 'theme') {
             nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
@@ -244,8 +252,6 @@ function ldaWeb() {
           links.push({ source: comic, target: word });
         }
 
-        // console.log(word, 'is word')
-        // console.log(themes)
         themes.forEach(theme => {
           if (!nodes[theme]) {
             nodes[theme] = { name: theme, type: "theme", parent: word };
@@ -257,12 +263,8 @@ function ldaWeb() {
         nameCounts[word] = (nameCounts[word] || 0) + 1;
       });
 
-      // console.log(word_list)
-
       // Convert nodes object to array
       const nodesArray = Object.values(nodes);
-
-      // console.log(links);
 
       const svg = d3.select("svg"),
         width = +svg.attr("width"),
@@ -340,7 +342,6 @@ function ldaWeb() {
                  
               });
 
-
             const linkTheme = svg.selectAll("line")
               .data(themeLinks)
               .enter()
@@ -350,13 +351,6 @@ function ldaWeb() {
 
           }
         });
-
-
-      // themeLinks.append('text')
-      //   .text(d => d.name)
-      //   .attr('font-size', 12)
-      //   .attr('text-anchor', 'middle')
-      //   .attr('dy', 24); // Adjust vertical alignment of text
 
       // Append text for 'word' nodes
       wordNodes.append('text')
