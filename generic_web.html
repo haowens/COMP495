@@ -134,9 +134,10 @@
       wordNodes.append("circle")
         .attr("r", 8) // Set larger radius for 'word' nodes
         .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue")
-        .on("click", function (event, d) {
+        .on("click", function (d, event) {
+          console.log(d, 'is d');
           // Log the type of the clicked node
-          console.log(d.type);
+          console.log(event, 'is event');
           // Check if the clicked node is a 'word' node
           if (d.type === "word") {
             let themeNames = [];
@@ -161,6 +162,7 @@
                   .attr('font-size', 12)
                   .attr('text-anchor', 'middle')
                  
+
               });
 
 
@@ -173,13 +175,6 @@
 
           }
         });
-
-
-      // themeLinks.append('text')
-      //   .text(d => d.name)
-      //   .attr('font-size', 12)
-      //   .attr('text-anchor', 'middle')
-      //   .attr('dy', 24); // Adjust vertical alignment of text
 
       // Append text for 'word' nodes
       wordNodes.append('text')
@@ -199,7 +194,9 @@
       });
 
       function drag(simulation) {
+        console.log(simulation, 'is simulation')
         function dragstarted(event) {
+          console.log(event, 'is event')
           if (!event.active) simulation.alphaTarget(0.3).restart();
           event.subject.fx = event.subject.x;
           event.subject.fy = event.subject.y;
