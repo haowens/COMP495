@@ -441,6 +441,7 @@ function openTab(evt, tabName, comedian) {
     tabcontent[i].style.display = "none";
   }
   tabContent = document.getElementById(comedian + " " + tabName);
+  tabContent.innerHTML = '';
 
   context.subtext.forEach((subtext) => {
     tabContent.innerHTML += `<div style="color: orange;font-weight:600;">${subtext}</div>`;
