@@ -177,6 +177,229 @@ function themes() {
   render_div.append(col_ind, col_am);
 }
 
+// function ldaWeb() {
+//   clearMainDiv();
+
+//   let main = document.getElementById("main");
+//   main.innerHTML = "";
+
+//   let margin = { top: 0, right: 0, bottom: 0, left: 0 },
+//     width = window.innerWidth * 0.7 - margin.left - margin.right,
+//     height = window.innerHeight - margin.top - margin.bottom;
+
+//   let svg = d3
+//     .select("#main")
+//     .append("svg")
+//     .attr("width", width + margin.left + margin.right)
+//     .attr("height", height + margin.top + margin.bottom)
+//     .append("g")
+//     .attr("transform", `translate(${margin.left},${margin.top})`);
+
+//   svg
+//     .append("rect")
+//     .attr("width", "100%")
+//     .attr("height", "100%")
+//     .style("padding-left", "200px")
+//     .attr("fill", "white");
+
+//     const comicImages = {
+//       "Kate Berlant": "/index/images/berlant_no_bg.png",
+//       "Kanan": "/index/images/gill_no_bg.png",
+//       "Kenny": "/index/images/seb_no_bg.png",
+//       "Vir": "/index/images/das_no_bg.png",
+//       "Rock": "/index/images/rock_no_bg.png",
+//       "Mulaney": "/index/images/mulaney_no_bg.png",
+//       // Specify the image path for each comic
+//     };
+
+//     d3.csv("standup.csv").then(function (data) {
+//       const nodes = {};
+//       const links = [];
+//       const wordCounts = {};
+//       word_list = [];
+
+//       const nameCounts = {}; // Object to store counts of node names
+
+//       data.forEach(function (d) {
+//         const comic = d.Comic;
+//         const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
+//         const themes = d.Themes.split('/'); // Split themes by '/'
+
+//         if (!word_list.includes(word)) {
+//           word_list.push(word);
+//         }
+
+//         if (word_list.includes(themes)) {
+//           return;
+//         }
+//         // If the word hasn't been encountered for this comic yet, count it
+//         if (!wordCounts[word]) {
+//           wordCounts[word] = { count: 0, comics: {} };
+//         }
+//         if (!wordCounts[word].comics[comic]) {
+//           wordCounts[word].comics[comic] = true;
+//           wordCounts[word].count++;
+
+//           // Create nodes for comics
+//           if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
+
+//           // Create nodes for words and connect comics to words
+//           if (!nodes[word] || nodes[word].type === 'theme') {
+//             nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
+
+//           }
+
+//           links.push({ source: comic, target: word });
+//         }
+
+//         themes.forEach(theme => {
+//           if (!nodes[theme]) {
+//             nodes[theme] = { name: theme, type: "theme", parent: word };
+//           }
+//           links.push({ source: word, target: theme });
+//         });
+
+//         // Increment count for node name
+//         nameCounts[word] = (nameCounts[word] || 0) + 1;
+//       });
+
+//       // Convert nodes object to array
+//       const nodesArray = Object.values(nodes);
+
+//       const svg = d3.select("svg"),
+//         width = +svg.attr("width"),
+//         height = +svg.attr("height");
+
+//       const simulation = d3.forceSimulation(nodesArray)
+//         .force("link", d3.forceLink(links).id(d => d.name))
+//         .force("charge", d3.forceManyBody().strength(-50))
+//         .force("center", d3.forceCenter(width / 2, height / 2))
+//         .force("x", d3.forceX().strength(0.1).x(width / 2))
+//         .force("y", d3.forceY().strength(0.1).y(height / 2))
+//         .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
+
+//       console.log(simulation, 'is simulation')
+
+//       const filteredLinks = links.filter(link => link.source.type === 'comic');
+
+//       console.log(filteredLinks)
+
+//       const link = svg.selectAll("line")
+//         .data(filteredLinks)
+//         .enter()
+//         .append("line")
+//         .attr("stroke", "#999")
+//         .attr("stroke-opacity", 0.6);
+
+//       const node = svg.selectAll(".node")
+//         .data(nodesArray)
+//         .enter().append("g")
+//         .attr("class", "node")
+//         .call(drag(simulation)); // Enable dragging for nodes
+
+//       node.filter(d => d.type === "comic")
+//         .append("image")
+//         .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
+//         .attr("x", -24) // Adjust x position to center image
+//         .attr("y", -24) // Adjust y position to center image
+//         .attr("width", 48) // Set image width
+//         .attr("height", 48); // Set image height
+
+//       // Add 'word' nodes
+//       const wordNodes = node.filter(d => d.type === "word");
+
+//       // Append circles for 'word' nodes
+//       wordNodes.append("circle")
+//         .attr("r", 8) // Set larger radius for 'word' nodes
+//         .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue")
+//         .on("click", function (event, d) {
+//           // Log the type of the clicked node
+//           console.log(d.type);
+//           console.log(d3.event.subject, 'is d');
+//           // Check if the clicked node is a 'word' node
+//           if (d.type === "word") {
+//             let themeNames = [];
+//             const themeLinks = links.filter(link => link.target.type === 'theme' && link.target.parent === d.name);
+
+//             themeLinks.forEach(link => {
+//               themeNames.push(link.target.name);
+//             });
+
+
+//             const themeNodes = node.filter(node => node.type === "theme" && node.parent === d.name)
+//               .append("circle")
+//               .attr("r", 5) // Set larger radius for all words
+//               .attr("fill", "green")
+//               .each(function (d, i) {
+//                 const themeName = themeNames[i]; // Get theme name from themeNames array
+//                 d3.select(this.parentNode) // select parent group of the circle
+//                   .append("text")
+//                   .text(themeName)
+//                   .attr('dy', -10)// Adjust vertical alignment of text
+//                   .attr('dx', 10)
+//                   .attr('font-size', 12)
+//                   .attr('text-anchor', 'middle')
+                 
+//               });
+
+//             const linkTheme = svg.selectAll("line")
+//               .data(themeLinks)
+//               .enter()
+//               .append("line")
+//               .attr("stroke", "#999")
+//               .attr("stroke-opacity", 0.6);
+
+//           }
+//         });
+
+//       // Append text for 'word' nodes
+//       wordNodes.append('text')
+//         .text(d => d.name)
+//         .attr('font-size', 12)
+//         .attr('text-anchor', 'middle')
+//         .attr('dy', 24); // Adjust vertical alignment of text
+
+//       simulation.on("tick", () => {
+//         link
+//           .attr("x1", d => d.source.x)
+//           .attr("y1", d => d.source.y)
+//           .attr("x2", d => d.target.x)
+//           .attr("y2", d => d.target.y);
+
+//         node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
+//       });
+
+//       function drag(simulation) {
+        
+//         function dragstarted(event) {
+//           console.log(event, 'is event')
+//           if (!event.active) simulation.alphaTarget(0.3).restart();
+//           event.fx = event.x;
+//           event.fy = event.y;
+//         }
+
+//         function dragged(event) {
+//           event.fx = event.x;
+//           event.fy = event.y;
+//         }
+
+//         function dragended(event) {
+//           if (!event.active) simulation.alphaTarget(0);
+//           event.fx = null;
+//           event.fy = null;
+//         }
+
+//         return d3.drag()
+//           .on("start", dragstarted)
+//           .on("drag", dragged)
+//           .on("end", dragended);
+//       }
+//     });
+
+//   main.append(svg);
+// }
+
+
 function ldaWeb() {
   clearMainDiv();
 
@@ -199,141 +422,211 @@ function ldaWeb() {
     .append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
-    .style("padding-left", "400px")
+    .style("padding-left", "200px")
     .attr("fill", "white");
 
-  d3.csv("standup.csv").then(function (data) {
-    const nodes = {};
-    const links = [];
+    const comicImages = {
+      "Kate Berlant": "/index/images/berlant_no_bg.png",
+      "Kanan": "/index/images/gill_no_bg.png",
+      "Kenny": "/index/images/seb_no_bg.png",
+      "Vir": "/index/images/das_no_bg.png",
+      "Rock": "/index/images/rock_no_bg.png",
+      "Mulaney": "/index/images/mulaney_no_bg.png",
+      // Specify the image path for each comic
+    };
 
-    data.forEach(function (d) {
-      const comic = d.Comic;
-      const word = d.Word;
-      const themes = d.Themes.split("/"); // Split themes by '/'
+    d3.csv("standup.csv").then(function (data) {
+      const nodes = {};
+      const links = [];
+      const wordCounts = {};
+      word_list = [];
 
-      // Create nodes for comics
-      if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic" };
+      const nameCounts = {}; // Object to store counts of node names
 
-      // Create nodes for words and connect comics to words
-      if (!nodes[word]) {
-        nodes[word] = { name: word, type: "word", themes: themes };
-      }
-      links.push({ source: comic, target: word });
+      data.forEach(function (d) {
+        const comic = d.Comic;
+        const word = d.Word.toLowerCase(); // Convert word to lowercase for case insensitivity
+        const themes = d.Themes.split('/'); // Split themes by '/'
 
-      // Create nodes for themes and connect words to themes
-      themes.forEach((theme) => {
-        if (!nodes[theme]) {
-          nodes[theme] = { name: theme, type: "theme" };
+        if (!word_list.includes(word)) {
+          word_list.push(word);
         }
-        links.push({ source: word, target: theme });
+
+        if (word_list.includes(themes)) {
+          return;
+        }
+        // If the word hasn't been encountered for this comic yet, count it
+        if (!wordCounts[word]) {
+          wordCounts[word] = { count: 0, comics: {} };
+        }
+        if (!wordCounts[word].comics[comic]) {
+          wordCounts[word].comics[comic] = true;
+          wordCounts[word].count++;
+
+          // Create nodes for comics
+          if (!nodes[comic]) nodes[comic] = { name: comic, type: "comic", image: comicImages[comic] }; // Retrieve the image source for the comic
+
+          // Create nodes for words and connect comics to words
+          if (!nodes[word] || nodes[word].type === 'theme') {
+            nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
+
+          }
+
+          links.push({ source: comic, target: word });
+        }
+
+        themes.forEach(theme => {
+          if (!nodes[theme]) {
+            nodes[theme] = { name: theme, type: "theme", parent: word };
+          }
+          links.push({ source: word, target: theme });
+        });
+
+        // Increment count for node name
+        nameCounts[word] = (nameCounts[word] || 0) + 1;
       });
-    });
 
-    // Convert nodes object to array
-    const nodesArray = Object.values(nodes);
+      // Convert nodes object to array
+      const nodesArray = Object.values(nodes);
 
-    // const svg = d3.select("svg"),
-    //   width = +svg.attr("width"),
-    //   height = +svg.attr("height");
+      const svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
 
-    const simulation = d3
-      .forceSimulation(nodesArray)
-      .force(
-        "link",
-        d3.forceLink(links).id((d) => d.name)
-      )
-      .force("charge", d3.forceManyBody().strength(-50))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force(
-        "x",
-        d3
-          .forceX()
-          .strength(0.1)
-          .x(width / 2)
-      )
-      .force(
-        "y",
-        d3
-          .forceY()
-          .strength(0.1)
-          .y(height / 2)
-      )
-      .force(
-        "collision",
-        d3.forceCollide().radius((d) => (d.type === "comic" ? 20 : 10))
-      ); // Adjust radius for collision
+      const simulation = d3.forceSimulation(nodesArray)
+        .force("link", d3.forceLink(links).id(d => d.name))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("x", d3.forceX().strength(0.1).x(width / 2))
+        .force("y", d3.forceY().strength(0.1).y(height / 2))
+        .force("collision", d3.forceCollide().radius(d => d.type === "comic" ? 20 : 10)); // Adjust radius for collision
 
-    const link = svg
-      .selectAll("line")
-      .data(links)
-      .enter()
-      .append("line")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6);
+      console.log(simulation, 'is simulation')
 
-    const node = svg
-      .selectAll("circle")
-      .data(nodesArray)
-      .enter()
-      .append("circle")
-      .attr("r", (d) => (d.type === "comic" ? 12 : d.type === "word" ? 8 : 5)) // Different radius for comics, words, and themes
-      .attr("fill", (d) =>
-        d.type === "comic"
-          ? "orange"
-          : d.type === "word"
-          ? "steelblue"
-          : "green"
-      ) // Different color for comics, words, and themes
-      .call(drag(simulation));
+      const filteredLinks = links.filter(link => link.source.type === 'comic');
 
-    const label = svg
-      .selectAll(null)
-      .data(nodesArray)
-      .enter()
-      .append("text")
-      .text((d) => d.name)
-      .attr("font-size", 12)
-      .attr("dx", 15)
-      .attr("dy", 4)
-      .attr("fill", "black");
+      console.log(filteredLinks)
 
-    simulation.on("tick", () => {
-      link
-        .attr("x1", (d) => d.source.x)
-        .attr("y1", (d) => d.source.y)
-        .attr("x2", (d) => d.target.x)
-        .attr("y2", (d) => d.target.y);
+      const link = svg.selectAll("line")
+        .data(filteredLinks)
+        .enter()
+        .append("line")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6);
 
-      node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+      const node = svg.selectAll(".node")
+        .data(nodesArray)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(drag(simulation)); // Enable dragging for nodes
 
-      label.attr("x", (d) => d.x).attr("y", (d) => d.y);
-    });
+      node.filter(d => d.type === "comic")
+        .append("image")
+        .attr("xlink:href", d => comicImages[d.name]) // Set image source for comic nodes
+        .attr("x", -24) // Adjust x position to center image
+        .attr("y", -24) // Adjust y position to center image
+        .attr("width", 48) // Set image width
+        .attr("height", 48); // Set image height
 
-    function drag(simulation) {
-      function dragstarted(event) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        event.subject.fx = event.subject.x;
-        event.subject.fy = event.subject.y;
-      }
+      // Add 'word' nodes
+      const wordNodes = node.filter(d => d.type === "word");
 
-      function dragged(event) {
-        event.subject.fx = event.x;
-        event.subject.fy = event.y;
-      }
+      // Append circles for 'word' nodes
+      wordNodes.append("circle")
+        .attr("r", 8) // Set larger radius for 'word' nodes
+        .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue")
+        .on("click", function (d, event) {
+          // Log the type of the clicked node
+          console.log(event, 'is event');
+          console.log(d, 'is d');
+          // console.log(d3.event.subject, 'is d');
+          // Check if the clicked node is a 'word' node
+          if (d.type === "word") {
+            let themeNames = [];
+            const themeLinks = links.filter(link => link.target.type === 'theme' && link.target.parent === d.name);
 
-      function dragended(event) {
-        if (!event.active) simulation.alphaTarget(0);
-        event.subject.fx = null;
-        event.subject.fy = null;
-      }
+            themeLinks.forEach(link => {
+              themeNames.push(link.target.name);
+            });
 
-      return d3
-        .drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+
+            const themeNodes = node.filter(node => node.type === "theme" && node.parent === d.name)
+              .append("circle")
+              .attr("r", 5) // Set larger radius for all words
+              .attr("fill", "green")
+              .each(function (d, i) {
+                const themeName = themeNames[i]; // Get theme name from themeNames array
+                d3.select(this.parentNode) // select parent group of the circle
+                  .append("text")
+                  .text(themeName)
+                  .attr('dy', -10)// Adjust vertical alignment of text
+                  .attr('dx', 10)
+                  .attr('font-size', 12)
+                  .attr('text-anchor', 'middle')
+                 
+              });
+
+            const linkTheme = svg.selectAll("line")
+              .data(themeLinks)
+              .enter()
+              .append("line")
+              .attr("stroke", "#999")
+              .attr("stroke-opacity", 0.6);
+
+          }
+        });
+
+      // Append text for 'word' nodes
+      wordNodes.append('text')
+        .text(d => d.name)
+        .attr('font-size', 12)
+        .attr('text-anchor', 'middle')
+        .attr('dy', 24); // Adjust vertical alignment of text
+
+      simulation.on("tick", () => {
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        node.attr("transform", d => `translate(${d.x},${d.y})`); // Translate nodes based on simulation data
+      });
+      function drag(simulation) {
+        
+        function dragstarted(d) {
+            const customEvent = {
+                type: 'start',
+                sourceEvent: d3.event.sourceEvent,
+                subject: d,
+                identifier: 'mouse',
+                target: d3.event.target,
+                // Add other properties as needed
+            };
+            console.log(customEvent, 'is event');
+            if (!customEvent.active) simulation.alphaTarget(0.3).restart();
+            customEvent.fx = customEvent.x;
+            customEvent.fy = customEvent.y;
+        }
+    
+        function dragged(event) {
+            event.fx = event.x;
+            event.fy = event.y;
+        }
+    
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.fx = null;
+            event.fy = null;
+        }
+    
+        return d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
     }
-  });
+    
+    });
 
   main.append(svg);
 }
