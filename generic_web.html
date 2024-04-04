@@ -61,7 +61,7 @@
           // Create nodes for words and connect comics to words
           if (!nodes[word] || nodes[word].type === 'theme') {
             nodes[word] = { name: word, type: "word", count: wordCounts[word].count, themes: themes };
-            // console.log(nodes[word])
+
           }
 
           links.push({ source: comic, target: word });
@@ -139,14 +139,8 @@
           console.log(d.type);
           // Check if the clicked node is a 'word' node
           if (d.type === "word") {
-
-            // const themeNodes = node.filter(node => node.type === "theme" && node.parent === d.name)
-            //   .append("circle")
-            //   .attr("r", 5) // Set larger radius for all words
-            //   .attr("fill", "green")
             let themeNames = [];
             const themeLinks = links.filter(link => link.target.type === 'theme' && link.target.parent === d.name);
-
 
             themeLinks.forEach(link => {
               themeNames.push(link.target.name);
@@ -162,19 +156,14 @@
                 d3.select(this.parentNode) // select parent group of the circle
                   .append("text")
                   .text(themeName)
+                  .attr('dy', -10)// Adjust vertical alignment of text
+                  .attr('dx', 10)
                   .attr('font-size', 12)
-                  // .attr('text-anchor', 'middle')
-                  .attr('dy', 5); // Adjust vertical alignment of text
-                  
+                  .attr('text-anchor', 'middle')
+                 
+
 
               });
-
-
-            //  themeNodes.on("click", function (event, d) {
-
-
-
-            console.log(themeNames);
 
 
             const linkTheme = svg.selectAll("line")
@@ -200,105 +189,6 @@
         .attr('font-size', 12)
         .attr('text-anchor', 'middle')
         .attr('dy', 24); // Adjust vertical alignment of text
-
-      // Filter nodes to only include 'theme' nodes
-      // const themeNodes = node.filter(d => d.type === "theme");
-
-      // // Append circles for 'theme' nodes
-      // themeNodes.append("circle")
-      //     .attr("r", 5) // Set radius for 'theme' nodes
-      //     .attr("fill", "green")
-      //     .style("display", "none"); // Initially hide 'theme' nodes
-
-      // node.filter(d => d.type === "word") // only words
-      //   .append("circle")
-      //   .attr("r", 8) // Set larger radius for all words
-      //   .attr("fill", d => wordCounts[d.name]?.count >= 2 ? "purple" : "steelblue")
-      //   .on("click", function (event, d) {
-      //     console.log(d.type)
-      //     if (d.type !== "word") return; // Only apply the filter to word/theme nodes
-
-      // const clickedNode = d3.select(this);
-      // const currentState = clickedNode.attr("data-state");
-      // console.log(clickedNode.attr("data-state"));
-
-      //   const childNodes = links.filter(link =>
-      //     link.source === d.name || link.target === d.name
-      //   ).flatMap(link =>
-      //     [link.source, link.target].map(name =>
-      //       nodesArray.find(node => node.name === name)
-      //     )
-      //   );
-
-      //   const connectedNodes = [d].concat(childNodes);
-      //   const connectedLinks = links.filter(link =>
-      //     connectedNodes.includes(nodesArray.find(node => node.name === link.source)) &&
-      //     connectedNodes.includes(nodesArray.find(node => node.name === link.target))
-      //   );
-
-      //   const greenNodes = svg.selectAll(".node circle").filter(e => e.type === "theme" && !connectedNodes.includes(e));
-      //   const greenLinks = svg.selectAll("line").filter(e => !connectedLinks.includes(e));
-
-      //   if (currentState === "hidden") {
-      //     greenNodes.style("display", "block");
-      //     greenLinks.style("visibility", "visible");
-      //     clickedNode.attr("data-state", "shown");
-      //   } else {
-      //     greenNodes.style("display", "none");
-      //     greenLinks.style("visibility", "hidden");
-      //     clickedNode.attr("data-state", "hidden");
-      //   }
-      // });
-
-      // node.filter(d => d.type === "theme") // only words
-      // .append("circle")
-      // .attr("r", 5) // Set larger radius for all words
-      // .attr("fill", "green")
-      // .on("click", function (event, d) {
-      //   console.log(d.type, 'second')
-
-
-      // if (d.type !== "word") return; // Only apply the filter to word/theme nodes
-
-      //   const clickedNode = d3.select(this);
-      //   const currentState = clickedNode.attr("data-state");
-      //   console.log(clickedNode.attr("data-state"));
-
-      //   const childNodes = links.filter(link =>
-      //     link.source === d.name || link.target === d.name
-      //   ).flatMap(link =>
-      //     [link.source, link.target].map(name =>
-      //       nodesArray.find(node => node.name === name)
-      //     )
-      //   );
-
-      //   const connectedNodes = [d].concat(childNodes);
-      //   const connectedLinks = links.filter(link =>
-      //     connectedNodes.includes(nodesArray.find(node => node.name === link.source)) &&
-      //     connectedNodes.includes(nodesArray.find(node => node.name === link.target))
-      //   );
-
-      //   const greenNodes = svg.selectAll(".node circle").filter(e => e.type === "theme" && !connectedNodes.includes(e));
-      //   const greenLinks = svg.selectAll("line").filter(e => !connectedLinks.includes(e));
-
-      //   if (currentState === "hidden") {
-      //     greenNodes.style("display", "block");
-      //     greenLinks.style("visibility", "visible");
-      //     clickedNode.attr("data-state", "shown");
-      //   } else {
-      //     greenNodes.style("display", "none");
-      //     greenLinks.style("visibility", "hidden");
-      //     clickedNode.attr("data-state", "hidden");
-      // }
-      // });
-
-
-      // node.append('text')
-      //   .text(d => d.name)
-      //   .attr('font-size', 12)
-      //   .attr('text-anchor', 'middle')
-      //   .attr('dy', 24); // Adjust vertical alignment of text
-
 
       simulation.on("tick", () => {
         link
